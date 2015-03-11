@@ -91,6 +91,54 @@ function nine.draw(x,y,w,h,p,center,pad)
 end
 
 function nine.convert(img)
+	local idata = img:getData()
+	
+	local hor,ver = {},{}
+
+	for i=0, img:getWidth() - 1 do
+		local r,g,b,a = idata:getPixel(i,0)
+		
+		if hor.x then
+			if r ~= 0 or g ~=0 or b ~= 0 or a ~= 255 then
+				hor.w = (i - 1) - hor.x
+				break
+			end
+		else
+			if r == 0 and g == 0 and b == 0 and a == 255 then
+				hor.x = i - 1
+			end
+		end
+	end
+	
+	for i=0, img:getHeight() - 1 do
+		local r,g,b,a = idata:getPixel(0,i)
+
+		if ver.y then
+			if r ~= 0 or g ~=0 or b ~= 0 or a ~= 255 then
+				ver.h = (i - 1) - ver.y
+				break
+			end
+		else
+			if r == 0 and g == 0 and b == 0 and a == 255 then
+				ver.y = i - 1
+			end
+		end
+	end
+
+	local w,h = img:getWidth()-2, img:getHeight()-2
+	local asset = love.graphics.newImageData(w,h):paste(idata,1,1,w,h)
+
+	local str = [[local a = ...
+
+return {
+	image = a:gsub("%.","%/")..".png",
+	hor = {x = ]]..hor.x..",w = "..hor.w..[[},
+	ver = {y = ]]..ver.y..",h = "..ver.h..[[},
+	pad = {0,0,0,0}, --Top, Right, Bottom, Left
+	cut = false,
+}]]
+
+	return str,asset
 end
 
 return nine
