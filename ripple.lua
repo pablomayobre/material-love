@@ -1,87 +1,190 @@
 local ripple = {}
 
-ripple.update = function (self, dt)
-	if self.t > self.ft and not self.hide then 
-		self.hide = true
-	end
-	
-	if not self.hide then
-		self.t = self.t + dt
-		local p = self.t/self.ft
-		local e = -p * (p - 2)
+ripple.fade = function (self)
+	if self.active then
+		self.ripples[#self.ripples + 1] = self.active
+		self.ripples[#self.ripples].fade = 0
 
-		self.r = e * self.fr
-		self.color[4] = self.scolor[4] - self.scolor[4] * e
+		self.active = nil
 	end
 end
 
-local ri = function (x1,y1,w1,h1, x2,y2,w2,h2)
-	local rect = {
-		{x1,y1,x1+w1,y1+h1},
-		{x2,y2,x2+w2,y2+h2}
+ripple.start = function (self,mx,my)
+	if self.active then
+		self:fade()
+	end
+
+	self.active = {
+		r = 0,
+		t = 0,
+		x = mx,
+		y = my,
+		finished = false,
+		fade = 0,
+		alpha = self.color[4]
 	}
-
-	xL, yT = math.max(rect[1][1],rect[2][1]),math.max(rect[1][2],rect[2][2])
-	xR, yB = math.min(rect[1][3],rect[2][3]),math.min(rect[1][4],rect[2][4])
-
-	if xL >= xR or yT >= yB then return else
-		return xL, yB, xR-xL, yB-yT
-	end
 end
 
-ripple.draw = function (self)
-	if not self.hide then
-		if self.box then
-			local x1,y1,w1,h1 = self.box.x,self.box.y,self.box.w,self.box.h
-			local x2,y2,w2,h2 = love.graphics.getScissor()
-			if (w2 and w2 < love.graphics.getWidth()) or (h2 and h2 < love.graphics.getHeight()) then
-				x1,y1,w1,h1 = ri(x1,y1,w1,h1, x2,y2,w2,h2)
+local ease = function (t,ft)
+	local p = t/ft
+	local e = -p * (p - 2)
+	return e
+end
+
+ripple.update = function (self,dt)
+	if self.active and not self.active.finished then
+		self.active.t = self.active.t + dt
+
+		self.active.r = ease(self.active.t, self.ft) * self.fr
+
+		if self.active.t >= self.ft then
+			self.active.finished = true
+		end
+	end
+
+	local _remove = {}
+
+	for i=1, #self.ripples do
+		if not self.ripples[i].finished then
+			self.ripples[i].t = self.ripples[i].t + dt
+
+			self.ripples[i].r = ease(self.ripples[i].t,self.ft) * self.fr
+
+			if self.ripples[i].t >= self.ft then
+				self.ripples[i].finished = true
 			end
-			love.graphics.setScissor(x1,y1,w1,h1)
-		elseif self.circle then
-			love.graphics.setStencil(function()
-				love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
-			end)
 		end
-		local r,g,b,a = love.graphics.getColor()
-		love.graphics.setColor(self.color)
-		love.graphics.circle("fill",self.x,self.y,self.r)
-		love.graphics.setColor(r,g,b,a)
-		if self.box then
-			love.graphics.setScissor()
-		elseif self.circle then
-			love.graphics.setStencil()
+
+		self.ripples[i].fade = self.ripples[i].fade + dt
+
+		self.ripples[i].alpha = self.color[4] - self.color[4] * ease(self.ripples[i].fade,self.ft)
+
+		if self.ripples[i].fade >= self.ft then
+			_remove[#_remove + 1] = i
 		end
+	end
+
+	for i=1, #_remove do
+		table.remove(self.ripples,_remove[i])
 	end
 end
 
-ripple.new = function (typ, x,y,w,h, mx,my, color)
+ripple.drawbox = function (self,scissor)
+	local x1, y1, w1, h1 = self.box.x, self.box.y, self.box.w, self.box.h
+
+	if scissor then
+		local x2, y2, w2, h2 = love.graphics.getScissor()
+
+		if x2 and y2 and w2 and h2 and (w2 < love.graphics.getWidth() or h2 < love.graphics.getWidth()) then
+			xL, yT = math.max(x1,x2),math.max(y1,y2)
+			xR, yB = math.min(x1 + w1,x2 + w2),math.min(y1 + h1,y2 + h2)
+
+			if xL >= xR or yT >= yB then return else
+				x1, y1, w1, h1 = xL, yB, xR-xL, yB-yT
+			end
+		end
+	end
+
+	love.graphics.setScissor(x1,y1,w1,h1)
+
+	local _r,_g,_b,_a = love.graphics.getColor()
+	local r,g,b = self.color[1], self.color[2], self.color[3]
+	
+	if self.active then
+		love.graphics.setColor(r,g,b,self.active.alpha)
+
+		if finished then
+			love.graphics.rectangle("fill",x1,y1,w1,h1)
+		else
+			love.graphics.circle("fill",self.active.x, self.active.y, self.active.r)
+		end
+	end
+
+	for i=1, #self.ripples do
+		love.graphics.setColor(r,g,b,self.ripples[i].alpha)
+
+		if finished then
+			love.graphics.rectangle("fill",x1,y1,w1,h1)
+		else
+			love.graphics.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
+		end
+	end
+
+	love.graphics.setColor(_r,_g,_b,_a)
+	love.graphics.setScissor()
+end
+
+ripple.drawcircle = function (self)
+	love.graphics.setStencil(function ()
+		love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
+	end)
+
+	local _r,_g,_b,_a = love.graphics.getColor()
+	local r,g,b = self.color[1], self.color[2], self.color[3]
+	
+	if self.active then
+		love.graphics.setColor(r,g,b,self.active.alpha)
+
+		if finished then
+			love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
+		else
+			love.graphics.circle("fill",self.active.x, self.active.y, self.active.r)
+		end
+	end
+
+	for i=1, #self.ripples do
+		love.graphics.setColor(r,g,b,self.ripples[i].alpha)
+
+		if finished then
+			love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
+		else
+			love.graphics.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
+		end
+	end
+
+	love.graphics.setColor(_r,_g,_b,_a)
+	love.graphics.setStencil()
+end
+
+ripple.box = function (box,color,tim)
 	local self = {}
 
-	self.scolor = {color[1],color[2],color[3],color[4]}
+	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
 	self.color = {color[1],color[2],color[3],color[4]}
 
-	if typ == "box" then
-		self.box = {x = x, y = y, w = w, h = h}
-	elseif typ == "circle" then
-		self.circle = {x = x, y = y, r = w}
-		mx,my,color = h, mx, my
-	else
-		error("The type passed to ripple.new is not defined", 1)
-	end
+	self.ft = tim or 1
 
-	self.x, self.y = mx, my
+	self.fr = (box.w * box.w + box.h * box.h)^0.5
 
-	self.r = 0
-	self.t = 0
+	self.ripples = {}
 
-	self.ft = 1
-	self.fr = (w * w + h * h)^0.5 * 2.5
+	self.start = function (...) return ripple.start (...) end
+	self.fade = function (...) return ripple.fade (...) end
 
-	self.draw = function (...) ripple.draw(...) end
-	self.update = function (...) ripple.update(...) end
+	self.update = function (...) return ripple.update (...) end
+	self.draw = function (...) return ripple.drawbox (...) end
 
-	self.hide = false
+	return self
+end
+
+ripple.circle = function (circle,color,tim)
+	local self = {}
+
+	self.circle = {x = circle.x, y = circle.y, r = circle.r}
+	self.color = {color[1],color[2],color[3],color[4]}
+	self.stcolor = {color[1],color[2],color[3],color[4]}
+
+	self.ft = tim or 1
+
+	self.fr = circle.r * 2
+
+	self.ripples = {}
+
+	self.start = function (...) return ripple.start (...) end
+	self.fade = function (...) return ripple.fade (...) end
+
+	self.update = function (...) return ripple.update (...) end
+	self.draw = function (...) return ripple.drawcircle (...) end
 
 	return self
 end
