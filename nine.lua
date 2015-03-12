@@ -94,7 +94,7 @@ function nine.draw(x,y,w,h,p,center,pad,img)
 	
 	local d = love.graphics.draw
 
-	local x,y,w,h = x,y,w,h
+	local x,y,w,h,_ox,_oy,_ow,_oh = x,y,w,h,x,y,w,h
 
 	if pad then
 		x,y,w,h = x - p.pad[4], y - p.pad[1], w + p.pad[2] + p.pad[4], h + p.pad[1] + p.pad[3]
@@ -113,7 +113,7 @@ function nine.draw(x,y,w,h,p,center,pad,img)
 	end
 
 	if center and p.center then
-		d(p.assets[img], p.center, x, y, 0, w/p.w, h/p.h)
+		d(p.assets[img], p.center, _ox, _oy, 0, _ow/p.w, _oh/p.h)
 	end
 end
 

@@ -12,5 +12,5 @@ return {
 	},
 	hor = {x = 100,w = 200},
 	ver = {y = 100,h = 200},
-	pad = {-1,-1,-1,-1}, --Top, Right, Bottom, Left
+	pad = {0,0,0,0}, --Top, Right, Bottom, Left
 }
