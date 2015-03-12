@@ -18,17 +18,31 @@ end
 
 local nine = {}
 
-function nine.process (patch)	
-	local asset
-	if patch.cut then --Super Heavy Load (Better not use cut)
-		local d = love.graphics.newImageData(patch.image)
-		local w,h = _dumm:getWidth()-2, _dumm:getHeight()-2
-		asset = love.graphics.newImage(love.graphics.newImageData(w,h):paste(d,1,1,w,h))
+function nine.process (patch)
+	local assets, default = {}
+	if patch.multiimage then
+		if not type(patch.image)=="table" then error "This patch specifies multi-image but doesnt hold a table" end
+		
+		local i = 0
+		for k,v in pairs(patch.image) do
+			i = i + 1
+
+			if k ~= "default" then
+				assets[k] = love.graphics.newImage(v)
+			end
+		end
+		
+		if i < 1 then error "No images for this patch" end
+		
+		default = patch.image.default
+		if not assets[default] then error "The default image for this patch could not be found" end
 	else
-		asset = love.graphics.newImage(patch.image)
+		if not type(patch.image)=="string" then error "The value for the image of this patch is not valid" end
+		assets[1] = love.graphics.newImage(patch.image)
+		default = 1
 	end
 
-	local _w, _h = asset:getDimensions()
+	local _w, _h = assets[default]:getDimensions()
 	local _xw, _yh = patch.hor.x + patch.hor.w, patch.ver.y + patch.ver.h
 	local _wc, _hc = _w - _xw, _h - _yh
 
@@ -60,11 +74,24 @@ function nine.process (patch)
 	if patch.ver.h > 0 and patch.hor.w > 0 then
 		center = love.graphics.newQuad(patch.hor.x, patch.ver.y, patch.hor.w, patch.ver.h, _w, _h)
 	end
-
-	return {image = asset, bor = bor, cor = cor, pad = patch.pad, center = center, w = patch.hor.w, h = patch.ver.h}
+	
+	return {
+		assets = assets,
+		default = default,
+		bor = bor,
+		cor = cor,
+		pad = patch.pad,
+		center = center,
+		w = patch.hor.w,
+		h = patch.ver.h
+	}
 end
 
-function nine.draw(x,y,w,h,p,center,pad)
+function nine.draw(x,y,w,h,p,center,pad,img)
+	local img = img or p.default
+	
+	if not p.assets[img] then error (img.." is not a valid asset for this patch") end
+	
 	local d = love.graphics.draw
 
 	local x,y,w,h = x,y,w,h
@@ -76,17 +103,17 @@ function nine.draw(x,y,w,h,p,center,pad)
 	for i = 1, 4 do
 		if p.cor[i].quad then
 			local dx,dy = calc.cor(p.cor[i],x,y,w,h,i)			
-			d(p.image, p.cor[i].quad, x + dx, y + dy)
+			d(p.assets[img], p.cor[i].quad, x + dx, y + dy)
 		end
 
 		if p.bor[i].quad then
 			local dx,dy,sx,sy = calc.bor(p.bor[i],x,y,w,h,i)			
-			d(p.image, p.bor[i].quad, x + dx, y + dy, 0, sx, sy)
+			d(p.assets[img], p.bor[i].quad, x + dx, y + dy, 0, sx, sy)
 		end
 	end
 
 	if center and p.center then
-		d(p.image, p.center, x, y, 0, w/p.w, h/p.h)
+		d(p.assets[img], p.center, x, y, 0, w/p.w, h/p.h)
 	end
 end
 
@@ -135,7 +162,6 @@ return {
 	hor = {x = ]]..hor.x..",w = "..hor.w..[[},
 	ver = {y = ]]..ver.y..",h = "..ver.h..[[},
 	pad = {0,0,0,0}, --Top, Right, Bottom, Left
-	cut = false,
 }]]
 
 	return str,asset
