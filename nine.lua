@@ -87,7 +87,7 @@ function nine.process (patch)
 	}
 end
 
-function nine.draw(x,y,w,h,p,center,pad,img)
+function nine.draw(p,x,y,w,h,center,pad,img)
 	local img = img or p.default
 	
 	if not p.assets[img] then error (img.." is not a valid asset for this patch",2) end
