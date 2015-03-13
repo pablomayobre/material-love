@@ -57,7 +57,7 @@ ripple.update = function (self,dt)
 
 		self.ripples[i].fade = self.ripples[i].fade + dt
 
-		self.ripples[i].alpha = self.color[4] - self.color[4] * ease(self.ripples[i].fade,self.ft)
+		self.ripples[i].alpha = (self.color[4] or 255) - (self.color[4] or 255) * ease(self.ripples[i].fade,self.ft)
 
 		if self.ripples[i].fade >= self.ft then
 			_remove[#_remove + 1] = i
@@ -150,7 +150,7 @@ ripple.box = function (box,color,tim)
 	local self = {}
 
 	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
-	self.color = {color[1],color[2],color[3],color[4]}
+	self.color = {color[1],color[2],color[3],color[4] or 255}
 
 	self.ft = tim or 1
 
@@ -171,8 +171,7 @@ ripple.circle = function (circle,color,tim)
 	local self = {}
 
 	self.circle = {x = circle.x, y = circle.y, r = circle.r}
-	self.color = {color[1],color[2],color[3],color[4]}
-	self.stcolor = {color[1],color[2],color[3],color[4]}
+	self.color = {color[1],color[2],color[3],color[4] or 255}
 
 	self.ft = tim or 1
 
