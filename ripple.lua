@@ -156,11 +156,11 @@ ripple.box = function (box,color,tim)
 
 	self.ripples = {}
 
-	self.start = function (...) return ripple.start (...) end
-	self.fade = function (...) return ripple.fade (...) end
+	self.start = ripple.start
+	self.fade = ripple.fade
 
-	self.update = function (...) return ripple.update (...) end
-	self.draw = function (...) return ripple.drawbox (...) end
+	self.update = ripple.update
+	self.draw = ripple.drawbox
 
 	return self
 end
@@ -178,11 +178,11 @@ ripple.custom = function (custom,fr,color,tim)
 
 	self.ripples = {}
 
-	self.start = function (...) return ripple.start (...) end
-	self.fade = function (...) return ripple.fade (...) end
+	self.start = ripple.start
+	self.fade = ripple.fade
 
-	self.update = function (...) return ripple.update (...) end
-	self.draw = function (...) return ripple.drawcustom (...) end
+	self.update = ripple.update
+	self.draw = ripple.drawcustom
 
 	return self
 end

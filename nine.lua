@@ -18,6 +18,36 @@ end
 
 local nine = {}
 
+function nine.draw(p,x,y,w,h,center,pad,img)
+	local img = img or p.default
+
+	if not p.assets[img] then error (img.." is not a valid asset for this patch",2) end
+
+	local d = love.graphics.draw
+
+	local x,y,w,h,_ox,_oy,_ow,_oh = x,y,w,h,x,y,w,h
+
+	if pad then
+		x,y,w,h = x - p.pad[4], y - p.pad[1], w + p.pad[2] + p.pad[4], h + p.pad[1] + p.pad[3]
+	end
+
+	for i = 1, 4 do
+		if p.cor[i].quad then
+			local dx,dy = calc.cor(p.cor[i],x,y,w,h,i)			
+			d(p.assets[img], p.cor[i].quad, x + dx, y + dy)
+		end
+
+		if p.bor[i].quad then
+			local dx,dy,sx,sy = calc.bor(p.bor[i],x,y,w,h,i)			
+			d(p.assets[img], p.bor[i].quad, x + dx, y + dy, 0, sx, sy)
+		end
+	end
+
+	if center and p.center then
+		d(p.assets[img], p.center, _ox, _oy, 0, _ow/p.w, _oh/p.h)
+	end
+end
+
 function nine.process (patch)
 	local assets, default = {}
 	if patch.multiimage then
@@ -83,38 +113,9 @@ function nine.process (patch)
 		pad = patch.pad,
 		center = center,
 		w = patch.hor.w,
-		h = patch.ver.h
+		h = patch.ver.h,
+		draw = nine.draw,
 	}
-end
-
-function nine.draw(p,x,y,w,h,center,pad,img)
-	local img = img or p.default
-	
-	if not p.assets[img] then error (img.." is not a valid asset for this patch",2) end
-	
-	local d = love.graphics.draw
-
-	local x,y,w,h,_ox,_oy,_ow,_oh = x,y,w,h,x,y,w,h
-
-	if pad then
-		x,y,w,h = x - p.pad[4], y - p.pad[1], w + p.pad[2] + p.pad[4], h + p.pad[1] + p.pad[3]
-	end
-
-	for i = 1, 4 do
-		if p.cor[i].quad then
-			local dx,dy = calc.cor(p.cor[i],x,y,w,h,i)			
-			d(p.assets[img], p.cor[i].quad, x + dx, y + dy)
-		end
-
-		if p.bor[i].quad then
-			local dx,dy,sx,sy = calc.bor(p.bor[i],x,y,w,h,i)			
-			d(p.assets[img], p.bor[i].quad, x + dx, y + dy, 0, sx, sy)
-		end
-	end
-
-	if center and p.center then
-		d(p.assets[img], p.center, _ox, _oy, 0, _ow/p.w, _oh/p.h)
-	end
 end
 
 function nine.convert(img)
