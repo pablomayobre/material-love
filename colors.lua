@@ -340,7 +340,7 @@ local colors = {}
 function colors.main(name,variation)
 	if (name == "black" or name == "white") then
 		if variation then
-			error ("The colors black and white dont support variations, use colors.monochrome instead",1)
+			error ("The colors black and white dont support variations, use colors.monochrome instead",2)
 		end
 		
 		return unpack(_c[name].full)
@@ -351,15 +351,15 @@ function colors.main(name,variation)
 	if type(variation) == "number" then
 		variation = tostring(variation)
 	elseif not type(variation) == "string" then
-		error("Argument #2 to colors, number or string expected got "..type(variation),1)
+		error("Argument #2 to colors, number or string expected got "..type(variation),2)
 	end
 
 	if not _c[name] then
-		error ("Argument #1 to colors, "..name.." is not a valid color",1)
+		error ("Argument #1 to colors, "..name.." is not a valid color",2)
 	end
 
 	if not _c[name][variation] then
-		error ("Argument #2 to colors, "..variation.." is not a valid color variation for the color: "..name,1)
+		error ("Argument #2 to colors, "..variation.." is not a valid color variation for the color: "..name,2)
 	end
 
 	return unpack(_c[name][variation])
@@ -367,13 +367,13 @@ end
 
 function colors.monochrome(name,variation)
 	if not (name == "black" or name == "white") then
-		error ('The color "'..name..'" passed to monochrome is not black nor white',1)
+		error ('The color "'..name..'" passed to monochrome is not black nor white',2)
 	end
 
 	local variation = variation or "full"
 
 	if not _c[name][variation] then
-		error ("Argument #2 to monochrome, "..variation.." is not a valid color variation",1)
+		error ("Argument #2 to monochrome, "..variation.." is not a valid color variation",2)
 	end
 
 	return unpack (_c[name][variation])
@@ -391,7 +391,7 @@ end
 
 function colors.variation(name)
 	if not _c[name] then
-		error("Argument #1 to variations, the color is not a valid color",1)
+		error("Argument #1 to variations, the color is not a valid color",2)
 	end
 
 	local t = {}
@@ -408,7 +408,7 @@ function colors.background (l)
 		if l == "dark" then
 			return 0x37,0x47,0x4f --blue-grey 800
 		else
-			error ("Argument #1 to background, is not light nor black",1)
+			error ("Argument #1 to background, is not light nor black",2)
 		end
 	else
 		return 0xf9,0xf9,0xf9 --grey 50

@@ -12,7 +12,7 @@ fab.draw = function (x,y,r,depth)
 	local r = r or 56 * love.window.getPixelScale()
 	if r == "mini" then r = 40 * love.window.getPixelScale() end
 	local depth = depth or "z-depth-1"
-	if not fab.assets[depth] then error ("Argument #4 to fab.draw is not a valid depth",1) end
+	if not fab.assets[depth] then error ("Argument #4 to fab.draw is not a valid depth",2) end
 	local lg = love.graphics
 	local c = {lg.getColor()}
 	lg.push()

@@ -21,7 +21,7 @@ local nine = {}
 function nine.process (patch)
 	local assets, default = {}
 	if patch.multiimage then
-		if not type(patch.image)=="table" then error "This patch specifies multi-image but doesnt hold a table" end
+		if not type(patch.image)=="table" then error("This patch specifies multi-image but doesnt hold a table",2) end
 		
 		local i = 0
 		for k,v in pairs(patch.image) do
@@ -32,12 +32,12 @@ function nine.process (patch)
 			end
 		end
 		
-		if i < 1 then error "No images for this patch" end
+		if i < 1 then error("No images for this patch",2) end
 		
 		default = patch.image.default
-		if not assets[default] then error "The default image for this patch could not be found" end
+		if not assets[default] then error("The default image for this patch could not be found",2) end
 	else
-		if not type(patch.image)=="string" then error "The value for the image of this patch is not valid" end
+		if not type(patch.image)=="string" then error("The value for the image of this patch is not valid",2) end
 		assets[1] = love.graphics.newImage(patch.image)
 		default = 1
 	end
@@ -90,7 +90,7 @@ end
 function nine.draw(x,y,w,h,p,center,pad,img)
 	local img = img or p.default
 	
-	if not p.assets[img] then error (img.." is not a valid asset for this patch") end
+	if not p.assets[img] then error (img.." is not a valid asset for this patch",2) end
 	
 	local d = love.graphics.draw
 

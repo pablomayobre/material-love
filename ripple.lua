@@ -114,10 +114,8 @@ ripple.drawbox = function (self,scissor)
 	love.graphics.setScissor()
 end
 
-ripple.drawcircle = function (self)
-	love.graphics.setStencil(function ()
-		love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
-	end)
+ripple.drawcustom = function (self)
+	love.graphics.setStencil(self.custom)
 
 	local _r,_g,_b,_a = love.graphics.getColor()
 	local r,g,b = self.color[1], self.color[2], self.color[3]
@@ -126,7 +124,7 @@ ripple.drawcircle = function (self)
 		love.graphics.setColor(r,g,b,self.active.alpha)
 
 		if finished then
-			love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
+			self.custom()
 		else
 			love.graphics.circle("fill",self.active.x, self.active.y, self.active.r)
 		end
@@ -136,7 +134,7 @@ ripple.drawcircle = function (self)
 		love.graphics.setColor(r,g,b,self.ripples[i].alpha)
 
 		if finished then
-			love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r)
+			self.custom()
 		else
 			love.graphics.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
 		end
@@ -167,15 +165,16 @@ ripple.box = function (box,color,tim)
 	return self
 end
 
-ripple.circle = function (circle,color,tim)
+ripple.custom = function (custom,fr,color,tim)
 	local self = {}
 
-	self.circle = {x = circle.x, y = circle.y, r = circle.r}
 	self.color = {color[1],color[2],color[3],color[4] or 255}
 
 	self.ft = tim or 1
+	
+	self.custom = custom
 
-	self.fr = circle.r * 2
+	self.fr = fr
 
 	self.ripples = {}
 
@@ -183,7 +182,19 @@ ripple.circle = function (circle,color,tim)
 	self.fade = function (...) return ripple.fade (...) end
 
 	self.update = function (...) return ripple.update (...) end
-	self.draw = function (...) return ripple.drawcircle (...) end
+	self.draw = function (...) return ripple.drawcustom (...) end
+
+	return self
+end
+
+ripple.circle = function (circle,color,tim)
+	local self = ripple.custom(function()end,0,color,tim)
+
+	self.circle = {x = circle.x, y = circle.y, r = circle.r}
+
+	self.custom = function () love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r) end
+
+	self.fr = circle.r * 2
 
 	return self
 end

@@ -679,8 +679,9 @@ return setmetatable(icons,{
 		local unpack = table.unpack or unpack
 		for k,v in ipairs{...} do
 			if type(v) == "table" then
-				s = s..self(unpack(v))
+				s = s .. self(unpack(v))
 			else
+				if not self[v] then error('The icon "'..v..'" is not a valid icon',2) end
 				s = s .. self[v]
 			end
 		end
