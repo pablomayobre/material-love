@@ -7,7 +7,7 @@ return function (icons,color)
 		local font = love.graphics.getFont()
 		local r,g,b,a = love.graphics.getColor()
 		love.graphics.setFont(iconfont)
-		love.graphics.setColor(color.monochrome(c,active and "icons" or "inactive-icons"))
+		love.graphics.setColor(color.monochrome(c,active and "icon" or "inactive-icon"))
 		love.graphics.printf(
 			icons(icon),
 			x-(14*love.window.getPixelScale()),
