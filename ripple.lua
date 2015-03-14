@@ -144,11 +144,11 @@ ripple.drawcustom = function (self)
 	love.graphics.setStencil()
 end
 
-ripple.box = function (box,color,tim)
+ripple.box = function (x,y,w,h,r,g,b,a,tim)
 	local self = {}
 
 	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
-	self.color = {color[1],color[2],color[3],color[4] or 255}
+	self.color = {r,g,b,a or 255}
 
 	self.ft = tim or 1
 
@@ -165,10 +165,10 @@ ripple.box = function (box,color,tim)
 	return self
 end
 
-ripple.custom = function (custom,fr,color,tim)
+ripple.custom = function (custom,fr,r,g,b,a,tim)
 	local self = {}
 
-	self.color = {color[1],color[2],color[3],color[4] or 255}
+	self.color = {r,g,b,a or 255}
 
 	self.ft = tim or 1
 	
@@ -187,14 +187,14 @@ ripple.custom = function (custom,fr,color,tim)
 	return self
 end
 
-ripple.circle = function (circle,color,tim)
-	local self = ripple.custom(function()end,0,color,tim)
+ripple.circle = function (x,y,ra,r,g,b,a,tim)
+	local self = ripple.custom(function()end,0,r,g,b,a,tim)
 
-	self.circle = {x = circle.x, y = circle.y, r = circle.r}
+	self.circle = {x = x, y = y, r = ra}
 
 	self.custom = function () love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r) end
 
-	self.fr = circle.r * 2
+	self.fr = ra * 2
 
 	return self
 end
