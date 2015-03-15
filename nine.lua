@@ -118,7 +118,7 @@ function nine.process (patch)
 	}
 end
 
-function nine.convert(img) 
+function nine.convert(img)
 	local idata = img:getData()
 	local hor,ver = {},{}
 
@@ -151,10 +151,9 @@ function nine.convert(img)
 	end
 
 	local w,h = img:getWidth()-2, img:getHeight()-2
-	local asset = love.graphics.newImageData(w,h):paste(idata,1,1,w,h)
-
+	local asset = love.image.newImageData(w,h)
+	asset:paste(idata, 0, 0, 1, 1, w, h)
 	local str = [[local a = ...
-
 return {
 	image = a:gsub("%.","%/")..".png",
 	hor = {x = ]]..hor.x..",w = "..hor.w..[[},
