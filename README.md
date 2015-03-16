@@ -17,15 +17,29 @@ It is **NOT** a UI library nor is it intended to be, if you want you can use it 
 
 ## Documentation
 
-Check the [Wiki][10] page here at GitHub, it has description on each library and how to use them in your project
+Check the [Wiki][10] page here at GitHub.
+
+It has description on each library and how to use them in your project.
+
+## Contributing
+
+Check the [CONTRIBUTING.md][14] file for a Guide on how to contribute to this project.
+
+It tells you how to format your Issues and Pull Request so that is easier for me to help you.
+
+You may also ask simple questions in the [LÖVE forums][15]!
+
+## Credits
+
+I must give credit to Robin ([gvx][8]) for the [`roundrect.lua`][13] library which I used as a base for my own `roundrect.lua`
+
+Also thanks to [Mrmaxmeier][11] for [fixing some issues][12] in the `nine.convert` function.
 
 ## License
 
 This set of libraries is Licensed under **[MIT License][9]**
 
-Copyright(c) 2015 Pablo Ariel Mayobre (@Positive07)
-
-I must give credit to @Robin ([gvx][8]) for the `roundrect.lua` library which I used as a base for my own `roundrect.lua`
+Copyright(c) 2015 Pablo Ariel Mayobre (Positive07)
 
 [1]:https://www.google.com/design/spec/
 [2]:https://www.love2d.org
@@ -37,3 +51,8 @@ I must give credit to @Robin ([gvx][8]) for the `roundrect.lua` library which I 
 [8]:https://www.github.com/gvx
 [9]:https://www.github.com/Positive07/material-love/tree/master/LICENSE
 [10]:https://www.github.com/Positive07/material-love/wiki
+[11]:https://www.github.com/Mrmaxmeier
+[12]:https://www.github.com/Positive07/material-love/pull/3
+[13]:https://gist.github.com/gvx/9072860
+[14]:https://www.github.com/Positive07/material-love/tree/master/CONTRIBUTING.md
+[15]:https://www.love2d.org/forums/
