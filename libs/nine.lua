@@ -155,7 +155,7 @@ function nine.convert(img,name,encode)
 
 	for i=0, w - 1 do
 		local r,g,b,a = idata:getPixel(i,0)
-		
+
 		if hor.x then
 			if not hor.w and (r ~= 0 or g ~=0 or b ~= 0 or a ~= 255) then
 				hor.w = (i - 1) - hor.x
@@ -165,9 +165,9 @@ function nine.convert(img,name,encode)
 				hor.x = i - 1
 			end
 		end
-		
+
 		local r,g,b,a = idata:getPixel(i,h - 1)
-		
+
 		if por.x then
 			if not por.w and (r ~= 0 or g ~= 0 or b ~= 0 or a ~= 255) then
 				por.w = (i - 1) - por.x
@@ -177,7 +177,7 @@ function nine.convert(img,name,encode)
 				por.x = i - 1
 			end
 		end
-		
+
 		if hor.w and por.w then
 			break
 		end
@@ -192,7 +192,7 @@ function nine.convert(img,name,encode)
 
 	for i=0, h - 1 do
 		local r,g,b,a = idata:getPixel(0,i)
-		
+
 		if ver.y then
 			if not ver.h and (r ~= 0 or g ~=0 or b ~= 0 or a ~= 255) then
 				ver.h = (i - 1) - ver.y
@@ -202,9 +202,9 @@ function nine.convert(img,name,encode)
 				ver.y = i - 1
 			end
 		end
-		
+
 		local r,g,b,a = idata:getPixel(w - 1,i)
-		
+
 		if per.y then
 			if not per.h and (r ~= 0 or g ~= 0 or b ~= 0 or a ~= 255) then
 				per.h = (i - 1) - per.y
@@ -214,7 +214,7 @@ function nine.convert(img,name,encode)
 				per.y = i - 1
 			end
 		end
-		
+
 		if ver.h and per.h then
 			break
 		end
@@ -235,7 +235,7 @@ function nine.convert(img,name,encode)
 
 	local pad = {
 		ver.y - per.y,
-		(hor.x + hor.w) - (por.x + por.w)
+		(hor.x + hor.w) - (por.x + por.w),
 		(ver.y + ver.h) - (per.y + per.h),
 		hor.x - por.x,
 	}
@@ -243,7 +243,7 @@ function nine.convert(img,name,encode)
 	local p = ""
 	
 	for i = 1, 4 do
-		p = p..pad[1]..","
+		p = p..pad[i]..","
 	end
 
 	local w,h = img:getWidth()-2, img:getHeight()-2
@@ -256,7 +256,7 @@ function nine.convert(img,name,encode)
 		image = a.."/]]..name..[[.png",
 		hor = {x = ]]..hor.x..[[,w = ]]..hor.w..[[},
 		ver = {y = ]]..ver.y..[[,h = ]]..ver.h..[[},
-		pad = {]]..p..[[},
+		pad = {]]..p:sub(1,-2)..[[},
 	}
 end]]
 
