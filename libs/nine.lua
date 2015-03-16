@@ -233,11 +233,13 @@ function nine.convert(img,name,encode)
 	por.x = por.x and por.x or hor.x
 	per.y = per.y and per.y or ver.y
 
+	print(per.y,per.h,ver.y,ver.h)
+	
 	local pad = {
-		ver.y - per.y,
+		per.y - ver.y,
 		(hor.x + hor.w) - (por.x + por.w),
 		(ver.y + ver.h) - (per.y + per.h),
-		hor.x - por.x,
+		por.x - hor.x,
 	}
 
 	local p = ""
