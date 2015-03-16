@@ -11,7 +11,7 @@ return function (a,icons,color)
 		local r,g,b,a = love.graphics.getColor()
 
 		love.graphics.setFont(draw.font)
-		love.graphics.setColor(color.monochrome(c,active and "icon" or "inactive-icon"))
+		love.graphics.setColor(color.mono(c,active and "icon" or "inactive-icon"))
 		love.graphics.printf(icons(icon), x - 14*ps, y - 9*ps, 28 * ps, "center")
 
 		love.graphics.setFont(font)

@@ -24,6 +24,8 @@ local load = function (a)
 		lg.circle("fill",x,y,r)
 		lg.circle("line",x,y,r)
 	end
+	
+	setmetatable(fab,{__call = function (fab,...) return fab.draw(...) end})
 
 	return fab
 end

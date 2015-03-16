@@ -24,6 +24,12 @@ local load = function (a)
 		button		= lf(m,15)
 	}
 	
+	local get = function (roboto,font)
+		return roboto[font]
+	end
+	
+	setmetatable(roboto,{__call = get}
+
 	return roboto
 end
 
