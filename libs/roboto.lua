@@ -28,7 +28,7 @@ local load = function (a)
 		return roboto[font]
 	end
 	
-	setmetatable(roboto,{__call = get}
+	setmetatable(roboto,{__call = get})
 
 	return roboto
 end
