@@ -1,5 +1,7 @@
 --Based on Robin's roundrect.lua https://gist.github.com/gvx/9072860 all credits to him
-return function (x,y,w,h,xr,yr,pre,t)
+local roundrect = {}
+
+roundrect.get = function (x,y,w,h,xr,yr,pre,t)
 	local yr = yr or xr
 	local p,pre = {}, pre or xr + yr
 
@@ -26,3 +28,7 @@ return function (x,y,w,h,xr,yr,pre,t)
 
 	return p
 end
+
+setmetatable(roundrect,{__call = function (s,...) return s.get(...) end})
+
+return roundrect

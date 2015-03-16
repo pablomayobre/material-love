@@ -17,6 +17,8 @@ return function (a,icons,color)
 		love.graphics.setFont(font)
 		love.graphics.setColor(r,g,b,a)
 	end
-	
-	return setmetatable(draw,{__call = function (self,...) return self.draw(...) end})
+
+	setmetatable(draw,{__call = function (self,...) return self.draw(...) end})
+
+	return draw
 end

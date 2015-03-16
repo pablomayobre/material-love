@@ -1,5 +1,6 @@
 local fab = {}
-return function (a)
+
+local load = function (a)
 	fab.assets = {}
 
 	for i=1,5 do
@@ -26,3 +27,5 @@ return function (a)
 
 	return fab
 end
+
+return load

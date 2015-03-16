@@ -673,18 +673,20 @@ local icons =  {
 	["person-add"] = "\202\177"
 }
 
-return setmetatable(icons,{
-	__call = function (self,...)
-		local s = ""
-		local unpack = table.unpack or unpack
-		for k,v in ipairs{...} do
-			if type(v) == "table" then
-				s = s .. self(unpack(v))
-			else
-				if not self[v] then error('The icon "'..v..'" is not a valid icon',2) end
-				s = s .. self[v]
-			end
+local get = function (icon,...)
+	local s = ""
+	local unpack = table.unpack or unpack
+	for k,v in ipairs{...} do
+		if type(v) == "table" then
+			s = s .. get(unpack(v))
+		else
+			if not icon[v] then error('The icon "'..v..'" is not a valid icon',2) end
+			s = s .. icon[v]
 		end
-		return s
 	end
-})
+	return s
+end
+
+setmetatable(icons,{__call = get})
+
+return icons
