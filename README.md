@@ -11,7 +11,7 @@ Material-Love takes the overhead of generating some of the fancy effects describ
 
 It is **NOT** a UI library nor is it intended to be, if you want you can use it with any other GUI library like [Thranduil][3], [DOMinatrix][4], [Quickie][5] or, with some serious effort, [Love Frames][6].
 
-> **Note:** that none of them are really supported by this library. And as such it is not guaranteed to work.
+> **Note:** None of them are really supported by this library. And as such it is not guaranteed to work.
 
 ***
 
