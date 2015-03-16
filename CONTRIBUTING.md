@@ -9,15 +9,15 @@ Please follow this guideline in your Issues and Pull Request, otherwise I would 
 
 Well this library is pretty new so it may contain bugs in it, so in order for me or someone else to fix them you will need to provide some info.
 
-1 - First make sure that the issue was not posted before, look through the open issues and if you find someone having the same issue then comment on it saying you also have the same issue (if you can, post your system info and the error returned by LÖVE).
-2 - Look though closed issues, if the issue was reported before, try the proposed fixes, if the error persist, add "Similar to issue #n" in your issue description.
-3 - Mark your issue as a bug by appending `[Bug]` to your issue name
-4 - Make a descriptive title, but make it shor, "Please help me" is not a good example.
-5 - State the library you are having problems with, if you have problems with `nine.lua` then append `[nine]` to your issue name
-6 - Please provide info about your system, like Operating System and the version of LÖVE you are using
-7 - If you can, provide the error log that LÖVE outputs in the blue screen.
-8 - Help us recreate the bug, through a code snippet or uploading a `.love` file
-9 - Write a good description... Though if you provided everything I wrote above, it will be descriptive enough.
+1- First make sure that the issue was not posted before, look through the open issues and if you find someone having the same issue then comment on it saying you also have the same issue (if you can, post your system info and the error returned by LÖVE).
+2- Look though closed issues, if the issue was reported before, try the proposed fixes, if the error persist, add "Similar to issue #n" in your issue description.
+3- Mark your issue as a bug by appending `[Bug]` to your issue name
+4- Make a descriptive title, but make it shor, "Please help me" is not a good example.
+5- State the library you are having problems with, if you have problems with `nine.lua` then append `[nine]` to your issue name
+6- Please provide info about your system, like Operating System and the version of LÖVE you are using
+7- If you can, provide the error log that LÖVE outputs in the blue screen.
+8- Help us recreate the bug, through a code snippet or uploading a `.love` file
+9- Write a good description... Though if you provided everything I wrote above, it will be descriptive enough.
 
 This pretty much applies to everything from here onwards.
 
@@ -50,13 +50,15 @@ Awesome! You have some new functionalities to add to this library and you want m
 
 Well that is amazing! This library intends to keep growing in order to fullfill the Material-Design Guidelines so make sure that your new functionality fits this rules:
 
-1 - It adds a feature, that is part of the Material-Design spec
-2 - It was not previously there. Or it does the same thing as other lib, but in other way, and may be more efficient or provides more features.
+1- It adds a feature, that is part of the Material-Design spec
+2- It was not previously there. Or it does the same thing as other lib, but in other way, and may be more efficient or provides more features.
 
 Examples of this would be:
 
 >Spinners: Loading spinners are not currently implemented into this lib, but are part of the spec.
+
 |
+
 >Shadows-Shader: Currently we use nine-patch which is kinda static, shaders would add the feature to make shadows more dynamic.
 
 ## Coding style
