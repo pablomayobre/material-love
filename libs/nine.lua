@@ -219,7 +219,7 @@ function nine.convert(img,name,encode)
 			break
 		end
 	end
-	
+
 	if not ver.y then
 		error("Inavalid 9-patch image, it doesnt contain a vertical line",2)
 	end
@@ -233,8 +233,6 @@ function nine.convert(img,name,encode)
 	por.x = por.x and por.x or hor.x
 	per.y = per.y and per.y or ver.y
 
-	print(per.y,per.h,ver.y,ver.h)
-	
 	local pad = {
 		per.y - ver.y,
 		(hor.x + hor.w) - (por.x + por.w),
@@ -243,7 +241,7 @@ function nine.convert(img,name,encode)
 	}
 
 	local p = ""
-	
+
 	for i = 1, 4 do
 		p = p..pad[i]..","
 	end

@@ -1,3 +1,7 @@
+local colors = {}
+
+local unpack = unpack or table.unpack
+
 local _c = {
 	["red"] = {
 		["50"]  = {0xff,0xeb,0xee,0xff},
@@ -350,10 +354,6 @@ local _c = {
 		["button"] 			= {0xff,0xff,0xff,0xff}, --100
 	}
 }
-
-local unpack = unpack or table.unpack
-
-local colors = {}
 
 function colors.main(name,variation)
 	if (name == "black" or name == "white") then

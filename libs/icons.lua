@@ -1,4 +1,5 @@
 --Generated with StyleToLua https://gist.github.com/Positive07/79cee2ae97bbcc8dc760
+local unpack = table.unpack or unpack
 
 local icons =  {
 	["replay"] = "\195\150",
@@ -675,7 +676,7 @@ local icons =  {
 
 local get = function (icon,...)
 	local s = ""
-	local unpack = table.unpack or unpack
+
 	for k,v in ipairs{...} do
 		if type(v) == "table" then
 			s = s .. get(unpack(v))

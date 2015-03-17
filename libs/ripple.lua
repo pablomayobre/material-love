@@ -1,5 +1,13 @@
 local ripple = {}
 
+local ease = function (t,ft)
+	local p = t/ft
+	local e = -p * (p - 2)
+	return e
+end
+
+local lg = love.graphics
+
 ripple.fade = function (self)
 	if self.active then
 		self.ripples[#self.ripples + 1] = self.active
@@ -23,12 +31,6 @@ ripple.start = function (self,mx,my)
 		fade = 0,
 		alpha = self.color[4]
 	}
-end
-
-local ease = function (t,ft)
-	local p = t/ft
-	local e = -p * (p - 2)
-	return e
 end
 
 ripple.update = function (self,dt)
@@ -69,100 +71,34 @@ ripple.update = function (self,dt)
 	end
 end
 
-ripple.drawbox = function (self,scissor)
-	local x1, y1, w1, h1 = self.box.x, self.box.y, self.box.w, self.box.h
+ripple.draw = function (self)
+	lg.setStencil(self.custom)
 
-	if scissor then
-		local x2, y2, w2, h2 = love.graphics.getScissor()
-
-		if x2 and y2 and w2 and h2 and (w2 < love.graphics.getWidth() or h2 < love.graphics.getWidth()) then
-			xL, yT = math.max(x1,x2),math.max(y1,y2)
-			xR, yB = math.min(x1 + w1,x2 + w2),math.min(y1 + h1,y2 + h2)
-
-			if xL >= xR or yT >= yB then return else
-				x1, y1, w1, h1 = xL, yB, xR-xL, yB-yT
-			end
-		end
-	end
-
-	love.graphics.setScissor(x1,y1,w1,h1)
-
-	local _r,_g,_b,_a = love.graphics.getColor()
+	local _r,_g,_b,_a = lg.getColor()
 	local r,g,b = self.color[1], self.color[2], self.color[3]
 	
 	if self.active then
-		love.graphics.setColor(r,g,b,self.active.alpha)
-
-		if finished then
-			love.graphics.rectangle("fill",x1,y1,w1,h1)
-		else
-			love.graphics.circle("fill",self.active.x, self.active.y, self.active.r)
-		end
-	end
-
-	for i=1, #self.ripples do
-		love.graphics.setColor(r,g,b,self.ripples[i].alpha)
-
-		if finished then
-			love.graphics.rectangle("fill",x1,y1,w1,h1)
-		else
-			love.graphics.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
-		end
-	end
-
-	love.graphics.setColor(_r,_g,_b,_a)
-	love.graphics.setScissor()
-end
-
-ripple.drawcustom = function (self)
-	love.graphics.setStencil(self.custom)
-
-	local _r,_g,_b,_a = love.graphics.getColor()
-	local r,g,b = self.color[1], self.color[2], self.color[3]
-	
-	if self.active then
-		love.graphics.setColor(r,g,b,self.active.alpha)
+		lg.setColor(r,g,b,self.active.alpha)
 
 		if finished then
 			self.custom()
 		else
-			love.graphics.circle("fill",self.active.x, self.active.y, self.active.r)
+			lg.circle("fill",self.active.x, self.active.y, self.active.r)
 		end
 	end
 
 	for i=1, #self.ripples do
-		love.graphics.setColor(r,g,b,self.ripples[i].alpha)
+		lg.setColor(r,g,b,self.ripples[i].alpha)
 
 		if finished then
 			self.custom()
 		else
-			love.graphics.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
+			lg.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
 		end
 	end
 
-	love.graphics.setColor(_r,_g,_b,_a)
-	love.graphics.setStencil()
-end
-
-ripple.box = function (x,y,w,h,r,g,b,a,tim)
-	local self = {}
-
-	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
-	self.color = {r,g,b,a or 255}
-
-	self.ft = tim or 1
-
-	self.fr = (box.w * box.w + box.h * box.h)^0.5
-
-	self.ripples = {}
-
-	self.start = ripple.start
-	self.fade = ripple.fade
-
-	self.update = ripple.update
-	self.draw = ripple.drawbox
-
-	return self
+	lg.setColor(_r,_g,_b,_a)
+	lg.setStencil()
 end
 
 ripple.custom = function (custom,fr,r,g,b,a,tim)
@@ -182,17 +118,35 @@ ripple.custom = function (custom,fr,r,g,b,a,tim)
 	self.fade = ripple.fade
 
 	self.update = ripple.update
-	self.draw = ripple.drawcustom
+	self.draw = ripple.draw
+
+	return self
+end
+
+ripple.box = function (x,y,w,h,r,g,b,a,tim)
+	local self = ripple.custom(function() end, 0, r, g, b, a, tim)
+
+	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
+
+	self.custom = function ()
+		lg.rectangle("fill", self.box.x, self.box.y, self.box.w, self.box.h)
+		lg.rectangle("line", self.box.x, self.box.y, self.box.w, self.box.h)
+	end
+
+	self.fr = (self.box.w * self.box.w + self.box.h * self.box.h) ^ 0.5
 
 	return self
 end
 
 ripple.circle = function (x,y,ra,r,g,b,a,tim)
-	local self = ripple.custom(function()end,0,r,g,b,a,tim)
+	local self = ripple.custom(function() end, 0, r, g, b, a, tim)
 
 	self.circle = {x = x, y = y, r = ra}
 
-	self.custom = function () love.graphics.circle("fill",self.circle.x, self.circle.y, self.circle.r) end
+	self.custom = function ()
+		lg.circle("fill", self.circle.x, self.circle.y, self.circle.r)
+		lg.circle("line", self.circle.x, self.circle.y, self.circle.r)
+	end
 
 	self.fr = ra * 2
 
