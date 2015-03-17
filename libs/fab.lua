@@ -1,7 +1,7 @@
 local fab = {}
 
 local load = function (a)
-	local lg,ps = love.graphics, love.window.getPixelScale
+	local lg,ps = love.graphics, love.window.getPixelScale()
 
 	fab.assets = {}
 
