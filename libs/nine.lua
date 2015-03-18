@@ -243,7 +243,7 @@ function nine.convert(img,name,encode)
 	local p = ""
 
 	for i = 1, 4 do
-		p = p..pad[i]..","
+		p = p..pad[i]..", "
 	end
 
 	local w,h = img:getWidth()-2, img:getHeight()-2
@@ -251,12 +251,13 @@ function nine.convert(img,name,encode)
 	asset:paste(idata, 0, 0, 1, 1, w, h)
 
 	local str = [[return function (a)
+	local a = a or ""
 	return {
 		multiimage = false,
 		image = a.."/]]..name..[[.png",
-		hor = {x = ]]..hor.x..[[,w = ]]..hor.w..[[},
-		ver = {y = ]]..ver.y..[[,h = ]]..ver.h..[[},
-		pad = {]]..p:sub(1,-2)..[[},
+		hor = {x = ]]..hor.x..[[, w = ]]..hor.w..[[},
+		ver = {y = ]]..ver.y..[[, h = ]]..ver.h..[[},
+		pad = {]]..p:sub(1,-3)..[[},
 	}
 end]]
 

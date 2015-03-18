@@ -1,5 +1,5 @@
 return function (a)
-	local a = a.."/shadow"
+	local a = (a or "").."/shadow"
 	return {
 		multiimage = true,
 		image = {
@@ -10,8 +10,8 @@ return function (a)
 			[5] = a.."-5.png",
 			default = 1,
 		},
-		hor = {x = 100,w = 200},
-		ver = {y = 100,h = 200},
-		pad = {0,0,0,0},
+		hor = {x = 100, w = 200},
+		ver = {y = 100, h = 200},
+		pad = {0, 0, 0, 0},
 	}
 end

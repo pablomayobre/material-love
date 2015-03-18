@@ -37,10 +37,11 @@ material.roundrect = require (a.."roundrect")
 material.fab = require (a.."fab")(b)
 material.roboto = require (a.."roboto")(b)
 
-local shadow = material.nine.process(require (a.."shadow")(b))
+material.shadow = {}
+material.shadow.patch = material.nine.process(require (a.."shadow")(b))
 
-material.shadow = function (...)
-	return shadow:draw(...)
+material.shadow.draw = function (...)
+	return material.shadow.patch:draw(...)
 end
 
 icons = require (a.."icons")
@@ -50,5 +51,11 @@ material.icons = {
 	get = icons,
 	draw = drawicons,
 }
+
+material.icons.table = {}
+
+for k,v in pairs (icons) do
+	material.icons.table[k] = v
+end
 
 return material

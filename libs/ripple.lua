@@ -1,7 +1,7 @@
 local ripple = {}
 
-local ease = function (t,ft)
-	local p = t/ft
+local ease = function (time,ftime)
+	local p = time/ftime
 	local e = -p * (p - 2)
 	return e
 end
@@ -24,7 +24,7 @@ ripple.start = function (self,mx,my)
 
 	self.active = {
 		r = 0,
-		t = 0,
+		time = 0,
 		x = mx,
 		y = my,
 		finished = false,
@@ -35,11 +35,11 @@ end
 
 ripple.update = function (self,dt)
 	if self.active and not self.active.finished then
-		self.active.t = self.active.t + dt
+		self.active.time = self.active.time + dt
 
-		self.active.r = ease(self.active.t, self.ft) * self.fr
+		self.active.r = ease(self.active.time, self.ftime) * self.fr
 
-		if self.active.t >= self.ft then
+		if self.active.time >= self.ftime then
 			self.active.finished = true
 		end
 	end
@@ -48,20 +48,20 @@ ripple.update = function (self,dt)
 
 	for i=1, #self.ripples do
 		if not self.ripples[i].finished then
-			self.ripples[i].t = self.ripples[i].t + dt
+			self.ripples[i].time = self.ripples[i].time + dt
 
-			self.ripples[i].r = ease(self.ripples[i].t,self.ft) * self.fr
+			self.ripples[i].r = ease(self.ripples[i].time,self.ftime) * self.fr
 
-			if self.ripples[i].t >= self.ft then
+			if self.ripples[i].time >= self.ftime then
 				self.ripples[i].finished = true
 			end
 		end
 
 		self.ripples[i].fade = self.ripples[i].fade + dt
 
-		self.ripples[i].alpha = (self.color[4] or 255) - (self.color[4] or 255) * ease(self.ripples[i].fade,self.ft)
+		self.ripples[i].alpha = (self.color[4] or 255) - (self.color[4] or 255) * ease(self.ripples[i].fade,self.ftime)
 
-		if self.ripples[i].fade >= self.ft then
+		if self.ripples[i].fade >= self.ftime then
 			_remove[#_remove + 1] = i
 		end
 	end
@@ -101,12 +101,12 @@ ripple.draw = function (self)
 	lg.setStencil()
 end
 
-ripple.custom = function (custom,fr,r,g,b,a,tim)
+ripple.custom = function (custom,fr,r,g,b,a,time)
 	local self = {}
 
 	self.color = {r,g,b,a or 255}
 
-	self.ft = tim or 1
+	self.ftime = time or 1
 	
 	self.custom = custom
 
@@ -123,8 +123,8 @@ ripple.custom = function (custom,fr,r,g,b,a,tim)
 	return self
 end
 
-ripple.box = function (x,y,w,h,r,g,b,a,tim)
-	local self = ripple.custom(function() end, 0, r, g, b, a, tim)
+ripple.box = function (x,y,w,h,r,g,b,a,time)
+	local self = ripple.custom(function() end, 0, r, g, b, a, time)
 
 	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
 
@@ -138,8 +138,8 @@ ripple.box = function (x,y,w,h,r,g,b,a,tim)
 	return self
 end
 
-ripple.circle = function (x,y,ra,r,g,b,a,tim)
-	local self = ripple.custom(function() end, 0, r, g, b, a, tim)
+ripple.circle = function (x,y,ra,r,g,b,a,time)
+	local self = ripple.custom(function() end, 0, r, g, b, a, time)
 
 	self.circle = {x = x, y = y, r = ra}
 

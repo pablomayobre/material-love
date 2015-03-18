@@ -8,20 +8,20 @@ local n = OS == "Android" and OS == "iOS" and 0 or 1
 
 local load = function (a)
 	local a = a.."/roboto"
-	local m,r,l = a.."-medium.ttf",a.."-regular.ttf",a.."-light.ttf"
+	local medium,regular,light = a.."-medium.ttf",a.."-regular.ttf",a.."-light.ttf"
 
 	roboto = {
-		display4	= lf(l,112),
-		display3	= lf(r,56),
-		display2	= lf(r,45),
-		display1	= lf(r,34),
-		headline	= lf(r,24),
-		title		= lf(m,20),
-		subhead		= lf(r,16-n),
-		body2		= lf(m,14-n),
-		body1		= lf(r,14-n),
-		caption		= lf(r,12),
-		button		= lf(m,15)
+		display4	= lf(light, 	112 * ps),
+		display3	= lf(regular, 	56  * ps),
+		display2	= lf(regular, 	45  * ps),
+		display1	= lf(regular, 	34  * ps),
+		headline	= lf(regular, 	24  * ps),
+		title		= lf(medium, 	20  * ps),
+		subhead		= lf(regular,	(16 - n) * ps),
+		body2		= lf(medium, 	(14 - n) * ps),
+		body1		= lf(regular, 	(14 - n) * ps),
+		caption		= lf(regular, 	12  * ps),
+		button		= lf(medium, 	15  * ps)
 	}
 	
 	local get = function (roboto,font)
