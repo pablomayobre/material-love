@@ -15,6 +15,10 @@ It is **NOT** a UI library nor is it intended to be, if you want you can use it 
 
 ***
 
+## Demo
+
+Download a demo of this library from the releases [here](https://github.com/Positive07/material-love/releases/tag/demo)
+
 ## Documentation
 
 Check the [Wiki][10] page here at GitHub.
