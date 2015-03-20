@@ -31,6 +31,7 @@ local a = (...)..".libs."
 local b = (...):gsub("%.","%/").."/assets"
 
 material.nine = require (a.."nine")
+material.icons = require (a.."icons")
 material.ripple = require (a.."ripple")
 material.color = require (a.."colors")
 material.roundrect = require (a.."roundrect")
@@ -44,18 +45,7 @@ material.shadow.draw = function (...)
 	return material.shadow.patch:draw(...)
 end
 
-icons = require (a.."icons")
-drawicons = require (a.."drawicons")(b,icons,material.color)
-
-material.icons = {
-	get = icons,
-	draw = drawicons,
-}
-
-material.icons.table = {}
-
-for k,v in pairs (icons) do
-	material.icons.table[k] = v
-end
+local drawicons = require (a.."drawicons")(b,material.icons,material.color)
+material.icons.draw = drawicons
 
 return material

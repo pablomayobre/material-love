@@ -674,20 +674,41 @@ local icons =  {
 	["wrap-text"] = "\198\158",
 }
 
-local get = function (icon,...)
+local icon = {}
+
+icon.get = function (...)
 	local s = ""
 
 	for k,v in ipairs{...} do
 		if type(v) == "table" then
 			s = s .. get(unpack(v))
 		else
-			if not icon[v] then error('The icon "'..v..'" is not a valid icon',2) end
-			s = s .. icon[v]
+			if not icons[v] then error('The icon "'..v..'" is not a valid icon',2) end
+			s = s .. icons[v]
 		end
 	end
+
 	return s
 end
 
-setmetatable(icons,{__call = get})
+icon.list = function ()
+	local t = {}
 
-return icons
+	for k,v in pairs (icons) do
+		t[k] = v
+	end
+
+	return t
+end
+
+icon.names = function ()
+	local t = {}
+
+	for k,v in pairs (icons) do
+		t[#t + 1] = k
+	end
+
+	return t
+end
+
+return icon

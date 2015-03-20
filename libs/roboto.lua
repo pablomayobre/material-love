@@ -6,6 +6,15 @@ local OS = love.system.getOS()
 
 local n = OS == "Android" and OS == "iOS" and 0 or 1
 
+local lineheight = {
+	display2	= 48/45,
+	display1	= 40/34,
+	headline	= 32/24,
+	subhead		= 28/(16 - n),
+	body2		= 24/(14 - n),
+	body1		= 20/(14 - n),
+}
+
 local load = function (a)
 	local a = a.."/roboto"
 	local medium,regular,light = a.."-medium.ttf",a.."-regular.ttf",a.."-light.ttf"
@@ -23,7 +32,11 @@ local load = function (a)
 		caption		= lf(regular, 	12  * ps),
 		button		= lf(medium, 	15  * ps)
 	}
-	
+
+	for k,v in pairs(lineheight) do
+		roboto[k]:setLineHeight(lineheight[k])
+	end
+
 	local get = function (roboto,font)
 		return roboto[font]
 	end
