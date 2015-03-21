@@ -74,7 +74,7 @@ function image.draw(img, time, x, y, ra, sx, sy)
 		hsvShader:send("opacity", opacity)
 
 		love.graphics.setShader(hsvShader)
-	else
+	else --Fuck you Intel GMA 3100 combined with Windows!
 		love.graphics.setColor(r, g, b, a * opacity)
 	end
 
