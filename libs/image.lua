@@ -55,7 +55,7 @@ function image.new (img)
 		image = img,
 		time = 0,
 		update = function (self,dt)
-			self.time = math.min(self.time + 1, 1)
+			self.time = math.min(self.time + dt, 1)
 		end,
 		draw = function (self, x, y, ra, sx, sy)
 			image.draw(self.image, self.time, x, y, ra, sx, sy)
@@ -65,7 +65,7 @@ end
 
 function image.draw(img, time, x, y, ra, sx, sy)
 	local r,g,b,a = love.graphics.getColor()
-	
+
 	local opacity = inOutQuad(time,  0, 1, 1)
 
 	if supported then
@@ -79,7 +79,7 @@ function image.draw(img, time, x, y, ra, sx, sy)
 	end
 
 	love.graphics.draw(img, x, y, ra, sx, sy)
-	
+
 	if supported then
 		love.graphics.setShader()
 	else
@@ -87,4 +87,4 @@ function image.draw(img, time, x, y, ra, sx, sy)
 	end
 end
 
-return draw
+return image
