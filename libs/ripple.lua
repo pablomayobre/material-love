@@ -191,8 +191,9 @@ ripple.stencil = function (x,y,w,h,time)
 		end,
 
 		start = function (self,x,y,collapse)
-			local w = self.w - (x - self.x)
-			local h = self.h - (y - self.y)
+			local xw,yh = x - self.x, y - self.y
+			local w = math.max(self.w - (xw),xw)
+			local h = math.max(self.h - (yh),yh)
 			local ra = (h * h + w * w) ^ 0.5
 
 			self.time = 0
