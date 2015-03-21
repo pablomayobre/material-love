@@ -37,6 +37,8 @@ material.color = require (a.."colors")
 material.roundrect = require (a.."roundrect")
 material.fab = require (a.."fab")(b)
 material.roboto = require (a.."roboto")(b)
+material.image = require (a.."image")
+material.spinner = require (a.."spinner")
 
 material.shadow = {}
 material.shadow.patch = material.nine.process(require (a.."shadow")(b))

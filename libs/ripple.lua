@@ -172,4 +172,55 @@ ripple.circle = function (x,y,ra,r,g,b,a,time)
 	return self
 end
 
+ripple.stencil = function (x,y,w,h,time)
+	return {
+		x = x, y = y,
+		w = w, h = h,
+		ft = time or 1,
+
+		update = function () end,
+
+		draw = function (self,fun)
+			if self.active then
+				love.graphics.setStencil(self.stencil)
+				fun()
+				love.graphics.setStencil()
+			elseif self.finish then
+				fun()
+			end
+		end,
+
+		start = function (self,x,y,collapse)
+			local w = self.w - (x - self.x)
+			local h = self.h - (y - self.y)
+			local ra = (h * h + w * w) ^ 0.5
+
+			self.time = 0
+			self.active = true
+			self.finish = false
+
+			self.update = function (self,dt)
+				self.time = self.time + dt
+
+				local r = ra * ease(self.time, self.ft)
+				r = collapse and ra - r or r
+
+				self.stencil = function ()
+					love.graphics.circle("fill",x,y,r)
+				end
+
+				if self.ft < self.time then
+					self.active = false
+					self.finish = not collapse
+					self.update = function () end
+				end
+			end
+		end,
+
+		fade = function (self)
+			self:start(self.x + self.w/2, self.y + self.w/2, true)
+		end,
+	}
+end
+
 return ripple
