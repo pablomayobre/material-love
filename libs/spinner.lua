@@ -36,7 +36,7 @@ spinner.update = function (self,dt)
 
 	local offset = self.radius * pi2 - 4
 	local off4 = offset/4
-	
+
 	local dashoffset, plusrotate
 
 	local d = 0.5
@@ -58,6 +58,8 @@ spinner.update = function (self,dt)
 	finish = rotation + ((offset + 4 - dashoffset) / self.radius)
 
 	finish = finish < start and finish + pi2 or finish
+	finish = finish + 0.25
+	-- extend the bar slightly then its length is never zero
 
 	local a = pi2 / self.precision
 
