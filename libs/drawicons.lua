@@ -39,7 +39,7 @@ return function (a,icons,color)
 
 		lg.setFont(draw.font)
 		lg.setColor(color.mono(c, active and "icon" or "inactive-icon"))
-		lg.printf(icons.get(icon), - 14 * ps, - 9 * ps, 28 * ps, "center")
+		lg.printf(icons.get(icon), - 14 * ps, - 11 * ps, 28 * ps, "center")
 
 		love.graphics.pop()
 

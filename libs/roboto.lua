@@ -37,11 +37,11 @@ local load = function (a)
 		roboto[k]:setLineHeight(lineheight[k])
 	end
 
-	local get = function (roboto,font)
+	local get = function (roboto, font)
 		return roboto[font]
 	end
 	
-	setmetatable(roboto,{__call = get})
+	setmetatable(roboto, {__call = get})
 
 	return roboto
 end

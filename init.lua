@@ -46,7 +46,7 @@ material.shadow.draw = function (...)
 	return material.shadow.patch:draw(...)
 end
 
-local drawicons = require (a.."drawicons")(b,material.icons,material.color)
+local drawicons = require (a.."drawicons")(b,material.icons,material.colors)
 material.icons.draw = drawicons
 
 return material
