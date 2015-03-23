@@ -47,6 +47,7 @@ material.shadow.draw = function (...)
 end
 
 local drawicons = require (a.."drawicons")(b,material.icons,material.colors)
-material.icons.draw = drawicons
+material.icons.draw = drawicons.draw
+material.icons.font = drawicons.font
 
 return material

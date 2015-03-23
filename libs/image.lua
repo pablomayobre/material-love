@@ -58,7 +58,7 @@ function image.new (img)
 			self.time = math.min(self.time + dt, 1)
 		end,
 		draw = function (self, x, y, ra, sx, sy)
-			image.draw(self.image, self.time, x, y, ra, sx, sy)
+			return image.draw(self.image, self.time, x, y, ra, sx, sy)
 		end,
 	}
 end

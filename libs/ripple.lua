@@ -9,6 +9,10 @@ end
 local lg = love.graphics
 
 ripple.fade = function (self)
+	if self.type == "stencil" then
+		return self:fade()
+	end
+
 	if self.active then
 		self.ripples[#self.ripples + 1] = self.active
 
@@ -17,6 +21,10 @@ ripple.fade = function (self)
 end
 
 ripple.start = function (self, mx, my, r, g, b, a)
+	if self.type == "stencil" then
+		return self:start(mx, my)
+	end
+
 	local c
 
 	if r and g and b and a then
@@ -40,6 +48,10 @@ ripple.start = function (self, mx, my, r, g, b, a)
 end
 
 ripple.update = function (self, dt)
+	if self.type == "stencil" then
+		return self:update(dt)
+	end
+
 	if self.active and not self.active.finished then
 		self.active.time = self.active.time + dt
 
@@ -77,7 +89,11 @@ ripple.update = function (self, dt)
 	end
 end
 
-ripple.draw = function (self)
+ripple.draw = function (self,...)
+	if self.type == "stencil" then
+		return self:draw(...)
+	end
+
 	lg.setStencil(self.custom)
 
 	local _r,_g,_b,_a = lg.getColor()
@@ -139,6 +155,8 @@ ripple.custom = function (custom, fr, time)
 	self.update = ripple.update
 	self.draw = ripple.draw
 
+	self.type = "custom"
+
 	return self
 end
 
@@ -153,6 +171,7 @@ ripple.box = function (x, y, w, h, time)
 	end
 
 	self.fr = (self.box.w * self.box.w + self.box.h * self.box.h) ^ 0.5
+	self.type = "box"
 
 	return self
 end
@@ -168,12 +187,14 @@ ripple.circle = function (x, y, ra, time)
 	end
 
 	self.fr = ra * 2
+	self.type = "circle"
 
 	return self
 end
 
 ripple.stencil = function (x, y, w, h, time)
 	return {
+		type = "stencil",
 		x = x, y = y,
 		w = w, h = h,
 		ft = time or 1,
