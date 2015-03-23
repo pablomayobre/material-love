@@ -37,9 +37,15 @@ You may also ask simple questions in the [LÖVE forums][15]!
 
 I must give credit to Robin ([gvx][8]) for the [`roundrect.lua`][13] library which I used as a base for my own `roundrect.lua`
 
-Also thanks to [Mrmaxmeier][11] for [fixing some issues][12] in the `nine.convert` function.
+Also thanks to [Mrmaxmeier][11] for [fixing some issues][12] in the `nine.convert` function and the `image.lua` [file][16].
 
 ## License
+
+The Material Design Icon font is Licensed under **[SIL Open Font License 1.1][17]** (The License file can be found [here][19])
+
+
+Some of the icons are designed by Google and are under Copyright **[CC-BY][18]**
+
 
 This set of libraries is Licensed under **[MIT License][9]**
 
@@ -60,3 +66,7 @@ Copyright(c) 2015 Pablo Ariel Mayobre (Positive07)
 [13]:https://gist.github.com/gvx/9072860
 [14]:https://www.github.com/Positive07/material-love/tree/master/CONTRIBUTING.md
 [15]:https://www.love2d.org/forums/
+[16]:https://github.com/Positive07/material-love/blob/d119314500b36b9d965199f065d64008b38884da/libs/image.lua
+[17]:https://github.com/Templarian/MaterialDesign/blob/master/license.txt
+[18]:https://github.com/google/material-design-icons/blob/master/LICENSE
+[19]:https://github.com/Positive07/material-love/blob/master/assets/icons.license.txt

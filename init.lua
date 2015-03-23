@@ -1,9 +1,15 @@
 local material = {
-	_VERSION     = 'material-love v0.1.0',
+	_VERSION     = 'material-love v1.0.0',
 	_DESCRIPTION = 'Implementation of parts of the Material-Design spec, for LOVE',
 	_URL         = 'https://www.github.com/Positive07/material-love',
 	_LICENSE     = [[
-		The MIT License (MIT)
+		The Material Design Icon font is Licensed under SIL Open Font License 1.1
+		https://github.com/Templarian/MaterialDesign/blob/master/license.txt
+		
+		Some of the icons are designed by Google and are under Copyright CC-BY
+		https://github.com/google/material-design-icons/blob/master/LICENSE
+		
+		The Material-Love Library is Licensed under MIT License (MIT)
 
 		Copyright (c) 2015 Pablo Mayobre
 
