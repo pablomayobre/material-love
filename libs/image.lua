@@ -55,7 +55,7 @@ function image.new (img)
 		image = img,
 		time = 0,
 		update = function (self,dt)
-			self.time = math.min(self.time + 1, 1)
+			self.time = math.min(self.time + dt, 1)
 		end,
 		draw = function (self, x, y, ra, sx, sy)
 			image.draw(self.image, self.time, x, y, ra, sx, sy)

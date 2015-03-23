@@ -1,7 +1,7 @@
 local ripple = {}
 
-local ease = function (time,ftime)
-	local p = time/ftime
+local ease = function (time, ftime)
+	local p = time / ftime
 	local e = -p * (p - 2)
 	return e
 end
@@ -39,7 +39,7 @@ ripple.start = function (self, mx, my, r, g, b, a)
 	}
 end
 
-ripple.update = function (self,dt)
+ripple.update = function (self, dt)
 	if self.active and not self.active.finished then
 		self.active.time = self.active.time + dt
 
@@ -96,7 +96,7 @@ ripple.draw = function (self)
 		if finished then
 			self.custom()
 		else
-			lg.circle("fill",self.active.x, self.active.y, self.active.r)
+			lg.circle("fill", self.active.x, self.active.y, self.active.r)
 		end
 	end
 
@@ -114,11 +114,11 @@ ripple.draw = function (self)
 		if finished then
 			self.custom()
 		else
-			lg.circle("fill",self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
+			lg.circle("fill", self.ripples[i].x, self.ripples[i].y, self.ripples[i].r)
 		end
 	end
 
-	lg.setColor(_r,_g,_b,_a)
+	lg.setColor(_r, _g, _b, _a)
 	lg.setStencil()
 end
 
@@ -142,7 +142,7 @@ ripple.custom = function (custom, fr, time)
 	return self
 end
 
-ripple.box = function (x,y,w,h,r,g,b,a,time)
+ripple.box = function (x, y, w, h, time)
 	local self = ripple.custom(function() end, 0, time)
 
 	self.box = {x = box.x, y = box.y, w = box.w, h = box.h}
@@ -157,7 +157,7 @@ ripple.box = function (x,y,w,h,r,g,b,a,time)
 	return self
 end
 
-ripple.circle = function (x,y,ra,r,g,b,a,time)
+ripple.circle = function (x, y, ra, time)
 	local self = ripple.custom(function() end, 0, time)
 
 	self.circle = {x = x, y = y, r = ra}
@@ -172,7 +172,7 @@ ripple.circle = function (x,y,ra,r,g,b,a,time)
 	return self
 end
 
-ripple.stencil = function (x,y,w,h,time)
+ripple.stencil = function (x, y, w, h, time)
 	return {
 		x = x, y = y,
 		w = w, h = h,
@@ -180,7 +180,7 @@ ripple.stencil = function (x,y,w,h,time)
 
 		update = function () end,
 
-		draw = function (self,fun)
+		draw = function (self, fun)
 			if self.active then
 				love.graphics.setStencil(self.stencil)
 				fun()
@@ -190,24 +190,24 @@ ripple.stencil = function (x,y,w,h,time)
 			end
 		end,
 
-		start = function (self,x,y,collapse)
+		start = function (self, x, y, collapse)
 			local xw,yh = x - self.x, y - self.y
-			local w = math.max(self.w - (xw),xw)
-			local h = math.max(self.h - (yh),yh)
+			local w = math.max(self.w - (xw), xw)
+			local h = math.max(self.h - (yh), yh)
 			local ra = (h * h + w * w) ^ 0.5
 
 			self.time = 0
 			self.active = true
 			self.finish = false
 
-			self.update = function (self,dt)
+			self.update = function (self, dt)
 				self.time = self.time + dt
 
 				local r = ra * ease(self.time, self.ft)
 				r = collapse and ra - r or r
 
 				self.stencil = function ()
-					love.graphics.circle("fill",x,y,r)
+					love.graphics.circle("fill", x, y, r)
 				end
 
 				if self.ft < self.time then

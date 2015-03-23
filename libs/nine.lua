@@ -1,5 +1,5 @@
 local nine = {
-	_VERSION     = 'nine.lua v0.1.0',
+	_VERSION     = 'nine.lua v1.0.0',
 	_DESCRIPTION = 'Nine Patch implementation for LOVE (Part of Material-Love)',
 	_URL         = 'https://www.github.com/Positive07/material-love/tree/master/libs/nine.lua',
 	_LICENSE     = [[
@@ -27,25 +27,114 @@ local nine = {
 	]]
 }
 
-local calc = {}
+local add = function (state, x, y, w, h, sx, sy, j, k)
+	state.areas[#state.areas + 1] = {}
+	local a = state.areas[#state.areas]
 
-calc.cor = function (cor,x,y,w,h,i)
-	local x = (i == 1 or i == 4) and -cor.w or w
-	local y = i < 3 and -cor.h or h
-	return x,y
+	if w and w > 0 and h and h > 0 then
+		a.quad = love.graphics.newQuad(x,y,w,h,state.dimensions.w, state.dimensions.h)
+	end
+
+	a.x, a.y, a.w, a.h, a.sx, a.sy, a.j, a.k = x, y, w, h, sx, sy, j, k
 end
 
-calc.bor = function (bor,x,y,w,h,i)
-	local sx = ((i % 2) == 0) and 1 or w/bor.w
-	local sy = ((i % 2) == 1) and 1 or h/bor.h
+local vertical = function (state, x, w, sx, j, count)
+	local ver = state.ver
+	local prevyh = 0
 
-	local x = (i % 2) == 1 and 0 or (i == 2 and w or -bor.w)
-	local y = (i % 2) == 0 and 0 or (i == 3 and h or -bor.h)
+	local k = 0
 
-	return x,y,sx,sy
+	for i=1, #ver do
+		if ver[i].y > prevyh then
+			k = k + 1
+
+			add(state, x, prevyh, w, ver[i].y - prevyh, sx, false, j, k)
+
+			if count then
+				if k == 1 then
+					state.dy = - ver[i].y - prevyh
+					state.dh = - state.dy
+				end
+
+				state.static.y = state.static.y + ver[i].y - prevyh
+			end
+
+			prevyh = ver[i].y
+		end
+
+		if ver[i].y == prevyh then
+			k = k + 1
+
+			add(state, x, ver[i].y, w, ver[i].h, sx, true, j, k)
+
+			prevyh = ver[i].y + ver[i].h
+		else
+			error("The start of the vertical line "..i.." comes before another line finishes", 2)
+		end
+	end
+
+	if prevyh < state.dimensions.h then
+		k = k + 1
+
+		add(state, x, prevyh, w, state.dimensions.h - prevyh, sx, false, j, k)
+
+		if count then
+			state.dh = state.dh + state.dimensions.h - prevyh
+			state.static.y = state.static.y + state.dimensions.h - prevyh
+		end
+	end
 end
 
-function nine.draw(p,x,y,w,h,center,pad,img)
+local horizontal = function (state)
+	local hor = state.hor
+	local prevxw = 0
+
+	local j = 0
+	for i=1, #hor do
+		local count = (i == 1)
+
+		if hor[i].x > prevxw then
+			j = j + 1
+
+			local c
+			if count then count, c = false, true end
+
+			if c then
+				state.dx = - hor[i].x - prevxw
+				state.dw = - state.dx
+			end
+
+			vertical(state, prevxw, hor[i].x - prevxw, false, j, c)
+			state.static.x = state.static.x + hor[i].x - prevxw
+
+			prevxw = hor[i].x
+		end
+
+		if hor[i].x == prevxw then
+			j = j + 1
+
+			local c
+			if count then count, c = false, true end
+
+			vertical(state, hor[i].x, hor[i].w, true, j, c)
+
+			prevxw = hor[i].x + hor[i].w
+		else
+			error("The start of the horizontal line "..i.." comes before another line finishes", 2)
+		end
+	end
+
+	if prevxw < state.dimensions.w then
+		j = j + 1
+		
+		state.dw = state.dw + state.dimensions.w - prevxw
+		
+		vertical(state, prevxw, state.dimensions.w - prevxw, false, j)
+		state.static.x = state.static.x + state.dimensions.w - prevxw
+	end
+end
+
+nine.draw = function (p,x, y, w, h, pad, img)
 	local img = img or p.default
 
 	if not p.assets[img] then
@@ -53,120 +142,118 @@ function nine.draw(p,x,y,w,h,center,pad,img)
 	end
 
 	local d = love.graphics.draw
-	local x,y,w,h,_ox,_oy,_ow,_oh = x,y,w,h,x,y,w,h
+	local x,y,w,h = (x or 0) + p.dx, (y or 0) + p.dy , (w or 0) + p.dw, (h or 0) + p.dh
 
 	if pad then
 		x,y,w,h = x - p.pad[4], y - p.pad[1], w + p.pad[2] + p.pad[4], h + p.pad[1] + p.pad[3]
 	end
 
-	for i = 1, 4 do
-		if p.cor[i].quad then
-			local dx,dy = calc.cor(p.cor[i],x,y,w,h,i)
-			d(p.assets[img], p.cor[i].quad, x + dx, y + dy)
-		end
-		if p.bor[i].quad then
-			local dx,dy,sx,sy = calc.bor(p.bor[i],x,y,w,h,i)
-			d(p.assets[img], p.bor[i].quad, x + dx, y + dy, 0, sx, sy)
-		end
-	end
+	local ow, oh = w - p.static.x, h - p.static.y
+	if ow < 0 then error ("The width (" ..w..") is less than the minimum width (" ..p.static.x..") of this patch", 2) end
+	if oh < 0 then error ("The height ("..h..") is less than the minimum height ("..p.static.y..") of this patch", 2) end
 
-	if center and p.center then
-		d(p.assets[img], p.center, _ox, _oy, 0, _ow/p.w, _oh/p.h)
+	local pax, pay = x, y
+	local sax, say = ow / p.dinamic.x, oh / p.dinamic.y
+
+	local j, k = 1, 1
+	for i=1, #p.areas do
+		if p.areas[i].j > j then
+			j = p.areas[i].j
+			pax = pax + p.areas[i - 1].w * (p.areas[i - 1].sx and sax or 1)
+		end
+
+		if p.areas[i].k > k then
+			k = p.areas[i].k
+			pay = pay + p.areas[i - 1].h * (p.areas[i - 1].sy and say or 1)
+		elseif p.areas[i].k == 1 then
+			k = p.areas[i].k
+			pay = y
+		end
+
+		if p.areas[i].quad then
+			d(p.assets[img], p.areas[i].quad, pax, pay, 0, p.areas[i].sx and sax or 1, p.areas[i].sy and say or 1)
+		end
 	end
 end
 
-function nine.process (patch)
-	local assets, default = {}
-	if patch.multiimage then
-		if not type(patch.image)=="table" then
-			error("This patch specifies multi-image but doesnt hold a table",2)
-		end
-		local i = 0
-		for k,v in pairs(patch.image) do
+nine.process = function (patch, images)
+	local assets, images, default = {}, images or {}
+
+	if not type(patch.image)=="table" then
+		error("All images should be inside a table", 2)
+	end
+
+	local i = 0
+	for k,v in pairs(patch.image) do
+		if k ~= "default" then
 			i = i + 1
-			if k ~= "default" then
-				assets[k] = love.graphics.newImage(v)
-			end
+			assets[k] = images[k] or love.graphics.newImage(v)
 		end
-		if i < 2 then error("No images for this patch",2) end
-		default = patch.image.default
-		if not assets[default] then
-			error("The default image for this patch could not be found",2)
-		end
-	else
-		if not type(patch.image)=="string" then
-			error("The value for the image of this patch is not valid",2)
-		end
-		assets[1] = love.graphics.newImage(patch.image)
-		default = 1
+	end
+
+	if i < 1 then error("No images for this patch", 2) end
+
+	default = patch.image.default or 1
+
+	if not assets[default] then
+		error("The default image for this patch could not be found", 2)
 	end
 
 	local _w, _h = assets[default]:getDimensions()
-	local _xw, _yh = patch.hor.x + patch.hor.w, patch.ver.y + patch.ver.h
-	local _wc, _hc = _w - _xw, _h - _yh
 
-	local cor = {
-		{ x = 0,	y = 0,		w = patch.hor.x,	h = patch.ver.y	},
-		{ x = _xw,	y = 0,		w = _wc,			h = patch.ver.y	},
-		{ x = _xw,	y = _yh,	w = _wc,			h = _hc			},
-		{ x = 0,	y = _yh,	w = patch.hor.x,	h = _hc			}
-	}
-	local bor = {
-		{ x = patch.hor.x,	y = 0,				w = patch.hor.w,	h = patch.ver.y	},
-		{ x = _xw,			y = patch.ver.y,	w = _wc,			h = patch.ver.h	},
-		{ x = patch.hor.x,	y = _yh,			w = patch.hor.w,	h = _hc			},
-		{ x = 0,			y = patch.ver.y,	w = patch.hor.x,	h = patch.ver.h	}
-	}
-
-	for i=1, 4 do
-		if cor[i].w > 0 and cor[i].h > 0 then
-			cor[i].quad = love.graphics.newQuad(cor[i].x, cor[i].y, cor[i].w, cor[i].h, _w, _h)
-		end
-		if bor[i].w > 0 and bor[i].h > 0 then
-			bor[i].quad = love.graphics.newQuad(bor[i].x, bor[i].y, bor[i].w, bor[i].h, _w, _h)
-		end
-	end
-
-	local center
-	if patch.ver.h > 0 and patch.hor.w > 0 then
-		center = love.graphics.newQuad(patch.hor.x, patch.ver.y, patch.hor.w, patch.ver.h, _w, _h)
-	end
-
-	return {
+	local state = {
 		assets = assets,
 		default = default,
-		bor = bor,
-		cor = cor,
 		pad = patch.pad,
-		center = center,
-		w = patch.hor.w,
-		h = patch.ver.h,
+		hor = patch.hor,
+		ver = patch.ver,
+		areas = {},
+		static = {x = 0, y = 0},
+		dimensions = {w = _w, h = _h},
 		draw = nine.draw,
 	}
+
+	horizontal(state)
+
+	if #state.areas < 1 then
+		error("There are no areas in this patch", 2)
+	end
+
+	state.dinamic = {
+		x = state.dimensions.w - state.static.x,
+		y = state.dimensions.h - state.static.y,
+	}
+
+	state.hor, state.ver = nil, nil
+
+	return state
 end
 
 function nine.convert(img,name,encode)
 	local name = name or "image"
 	local encode = encode or false
+
 	local idata = img:getData()
-	local hor,ver = {},{}
+
+	local hor,ver = {{}},{{}}
 	local por,per = {},{}
+
 	local h,w = img:getHeight(),img:getWidth()
 
 	for i=0, w - 1 do
-		local r,g,b,a = idata:getPixel(i,0)
+		local r, g, b, a = idata:getPixel(i, 0)
 
-		if hor.x then
-			if not hor.w and (r ~= 0 or g ~=0 or b ~= 0 or a ~= 255) then
-				hor.w = (i - 1) - hor.x
+		if hor[#hor].x then
+			if not hor[#hor].w and (r ~= 0 or g ~=0 or b ~= 0 or a ~= 255) then
+				hor[#hor].w = (i - 1) - hor[#hor].x
 			end
 		else
 			if r == 0 and g == 0 and b == 0 and a == 255 then
-				hor.x = i - 1
+				hor[#hor].x = i - 1
 			end
 		end
 
-		local r,g,b,a = idata:getPixel(i,h - 1)
+		local r, g, b, a = idata:getPixel(i, h - 1)
 
 		if por.x then
 			if not por.w and (r ~= 0 or g ~= 0 or b ~= 0 or a ~= 255) then
@@ -178,32 +265,37 @@ function nine.convert(img,name,encode)
 			end
 		end
 
-		if hor.w and por.w then
-			break
+		if hor[#hor].w then
+			hor[#hor + 1] = {}
 		end
 	end
 
-	if not hor.x then
-		error ("Inavalid 9-patch image, it doesnt contain an horizontal line",2)
+	if not hor[#hor].x then
+		if #hor == 1 then
+			error ("Inavalid 9-patch image, it doesnt contain an horizontal line",2)
+		else
+			hor[#hor] = nil
+		end
 	end
-	if not hor.w then
-		hor.w = (w - 1) - hor.x
+
+	if not hor[#hor].w then
+		hor[#hor].w = (w - 1) - hor[#hor].x
 	end
 
 	for i=0, h - 1 do
-		local r,g,b,a = idata:getPixel(0,i)
+		local r, g, b, a = idata:getPixel(0, i)
 
-		if ver.y then
+		if ver[#ver].y then
 			if not ver.h and (r ~= 0 or g ~=0 or b ~= 0 or a ~= 255) then
-				ver.h = (i - 1) - ver.y
+				ver[#ver].h = (i - 1) - ver[#ver].y
 			end
 		else
 			if r == 0 and g == 0 and b == 0 and a == 255 then
-				ver.y = i - 1
+				ver[#ver].y = i - 1
 			end
 		end
 
-		local r,g,b,a = idata:getPixel(w - 1,i)
+		local r, g, b, a = idata:getPixel(w - 1, i)
 
 		if per.y then
 			if not per.h and (r ~= 0 or g ~= 0 or b ~= 0 or a ~= 255) then
@@ -215,29 +307,37 @@ function nine.convert(img,name,encode)
 			end
 		end
 
-		if ver.h and per.h then
-			break
+		if ver[#ver].h then
+			ver[#ver + 1] = {}
 		end
 	end
 
-	if not ver.y then
-		error("Inavalid 9-patch image, it doesnt contain a vertical line",2)
-	end
-	if not ver.h then
-		ver.h = (h - 1) - ver.y
+	if not ver[#ver].y then
+		if #ver == 1 then
+			error("Inavalid 9-patch image, it doesnt contain a vertical line",2)
+		else
+			ver[#ver] = nil
+		end
 	end
 
-	por.w = por.x and (por.w and por.w or (w - 1 - por.x))or hor.w
-	per.h = per.y and (per.h and per.h or (h - 1 - per.y))or ver.h
+	if not ver[#ver].h then
+		ver[#ver].h = (h - 1) - ver[#ver].y
+	end
 
-	por.x = por.x and por.x or hor.x
-	per.y = per.y and per.y or ver.y
+	local horw = hor[#hor].x + hor[#hor].w - hor[1].x
+	local verh = ver[#ver].y + ver[#ver].h - ver[1].y
+
+	por.w = por.x and (por.w and por.w or (w - 1 - por.x)) or horw
+	per.h = per.y and (per.h and per.h or (h - 1 - per.y)) or verh
+
+	por.x = por.x and por.x or hor[1].x
+	per.y = per.y and per.y or ver[1].y
 
 	local pad = {
-		per.y - ver.y,
-		(hor.x + hor.w) - (por.x + por.w),
-		(ver.y + ver.h) - (per.y + per.h),
-		por.x - hor.x,
+		per.y - ver[1].y,
+		(hor[1].x + horw) - (por.x + por.w),
+		(ver[1].y + verh) - (per.y + per.h),
+		por.x - hor[1].x,
 	}
 
 	local p = ""
@@ -247,17 +347,30 @@ function nine.convert(img,name,encode)
 	end
 
 	local w,h = img:getWidth()-2, img:getHeight()-2
-	local asset = love.image.newImageData(w,h)
+	local asset = love.image.newImageData(w, h)
+
 	asset:paste(idata, 0, 0, 1, 1, w, h)
+	
+	local hs, vs = "", ""
+	
+	for i=1, #hor do
+		hs = hs.."\n\t\t\t{x = "..hor[i].x..", w = "..hor[i].w.."},"
+	end
+	for i=1, #ver do
+		vs = vs.."\n\t\t\t{y = "..ver[i].y..", h = "..ver[i].h.."},"
+	end
 
 	local str = [[return function (a)
 	local a = a or ""
 	return {
-		multiimage = false,
-		image = a.."/]]..name..[[.png",
-		hor = {x = ]]..hor.x..[[, w = ]]..hor.w..[[},
-		ver = {y = ]]..ver.y..[[, h = ]]..ver.h..[[},
-		pad = {]]..p:sub(1,-3)..[[},
+		image = {
+			a.."/]]..name..[[.png",
+		},
+		pad = {]]..p:sub  (1, -3)..[[},
+		hor = {]]..hs:sub (1, -2)..[[
+		},
+		ver = {]]..vs:sub (1, -2)..[[
+		},
 	}
 end]]
 
@@ -269,7 +382,7 @@ end]]
 		end
 
 		asset:encode(encode..name..".png")
-		love.filesystem.write(encode..name..".lua",str)
+		love.filesystem.write(encode..name..".lua", str)
 	end
 
 	return str,asset

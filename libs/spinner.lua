@@ -27,14 +27,14 @@ end
 
 local pi2 = math.pi * 2
 
-spinner.update = function (self,dt)
+spinner.update = function (self, dt)
 	self.time = (self.time + (dt * self.speed)) % 1
 
 	self.polygon = {}
 
 	local rotation = self.time * 270
 
-	local offset = self.radius * pi2 - 4
+	local offset = self.radius * pi2
 	local off4 = offset/4
 	
 	local dashoffset, plusrotate
@@ -55,7 +55,7 @@ spinner.update = function (self,dt)
 	rotation = ((rotation + plusrotate) * math.pi / 180) % pi2
 
 	start = rotation
-	finish = rotation + ((offset + 4 - dashoffset) / self.radius)
+	finish = rotation + ((offset - dashoffset) / self.radius) + 0.25
 
 	finish = finish < start and finish + pi2 or finish
 
@@ -70,11 +70,11 @@ spinner.update = function (self,dt)
 	end
 end
 
-spinner.draw = function (self,x,y,r,sx,sy)
+spinner.draw = function (self, x, y, r, sx, sy)
 	love.graphics.push()
 
-	love.graphics.translate(x,y)
-	love.graphics.scale(sx,sy)
+	love.graphics.translate(x, y)
+	love.graphics.scale(sx, sy)
 	love.graphics.rotate((r or 0) - math.pi/2)
 
 	local _w = love.graphics.getLineWidth()
