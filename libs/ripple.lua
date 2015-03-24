@@ -240,7 +240,7 @@ ripple.stencil = function (x, y, w, h, time)
 		end,
 
 		fade = function (self)
-			self:start(self.x + self.w/2, self.y + self.w/2, true)
+			self:start(self.x + self.w/2, self.y + self.h/2, true)
 		end,
 	}
 end
