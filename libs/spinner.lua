@@ -15,8 +15,8 @@ end
 spinner.new = function (r, width, speed, precision)
 	return {
 		time = 0,
-		radius = r - width/2,
-		width = width,
+		radius = r + (width or 1)/2,
+		width = width or 1,
 		speed = speed or 1,
 		precision = precision or 100,
 		polygon = {},
