@@ -5,7 +5,7 @@ Material-Love is a set of libraries to use some of the features described in the
 
 ![Animation of Material - Love working](https://github.com/Positive07/material-love/blob/master/images/master.gif)
 
-Material-Love takes the overhead of generating some of the fancy effects described in those docs, like shadows, paper and ripples. It also facilitates the access to some other stuff like the Roboto Fonts, the color palettes, and even provides an icon font with 670 icons you can use in your project!
+Material-Love takes the overhead of generating some of the fancy effects described in those docs, like shadows, paper and ripples. It also facilitates the access to some other stuff like the Roboto Fonts, the color palettes, and even provides an icon font with 1008 icons you can use in your project!
 
 ***
 
