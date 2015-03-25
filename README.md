@@ -17,7 +17,20 @@ It is **NOT** a UI library nor is it intended to be, if you want you can use it 
 
 ## Demo
 
-Download a demo of this library from the releases [here](https://github.com/Positive07/material-love/releases/tag/demo)
+Download a demo of this library from the releases [here](https://github.com/Positive07/material-love/releases/tag/1.0.0-demo)
+
+Check the demo source code in the [`test` branch](https://github.com/Positive07/material-love/tree/test)
+
+## Download
+
+You can `git clone` this repo (I recommend you go to the [`source` branch](https://github.com/Positive07/material-love/tree/source), since it doesnt have the bothersome image folder nor the README.md or CONTRIBUTING.md)
+
+```shell
+git clone https://github.com/Positive07/material-love.git
+git checkout source
+```
+
+Alternatively you can download a `.zip` or `.tar.gz` from the [Releases](https://github.com/Positive07/material-love/releases/tag/1.0.0)
 
 ## Documentation
 
