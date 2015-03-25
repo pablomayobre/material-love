@@ -76,7 +76,7 @@ Some of the icons are designed by Google and are under Copyright **[CC-BY][18]**
 [12]:https://www.github.com/Positive07/material-love/pull/3
 [13]:https://gist.github.com/gvx/9072860
 [14]:https://www.github.com/Positive07/material-love/tree/master/CONTRIBUTING.md
-[15]:https://www.love2d.org/forums/
+[15]:https://love2d.org/forums/viewtopic.php?f=5&t=79918
 [16]:https://github.com/Positive07/material-love/blob/d119314500b36b9d965199f065d64008b38884da/libs/image.lua
 [17]:https://github.com/Templarian/MaterialDesign/blob/master/license.txt
 [18]:https://github.com/google/material-design-icons/blob/master/LICENSE
