@@ -92,4 +92,4 @@ function image.draw(img, time, x, y, ra, sx, sy)
 	end
 end
 
-return draw
+return image
