@@ -36,7 +36,7 @@ local material = {
 local a = (...)..".libs."
 local b = (...):gsub("%.","%/").."/assets"
 
-local libs = {"nine", "icons", "ripple", "colors", "roundrect", "image", "spinner"}
+local libs = {"patchy", "icons", "ripple", "colors", "roundrect", "image", "spinner", "shadow"}
 
 for _,v in ipairs(libs) do
 	material[v] = require(a..v)
@@ -45,12 +45,7 @@ end
 material.fab = require (a.."fab")(b)
 material.roboto = require (a.."roboto")(b)
 
-material.shadow = {}
-material.shadow.patch = material.nine.process(require (a.."shadow")(b))
-
-material.shadow.draw = function (...)
-	return material.shadow.patch:draw(...)
-end
+material.shadow.load(b.."/shadow", material.patchy)
 
 local drawicons = require (a.."drawicons")(b,material.icons,material.colors)
 material.icons.draw = drawicons.draw
