@@ -17,7 +17,7 @@ shadow.metadata = function ()
 		dynamic		= {x = 200, y = 200},
 		static		= {x = 200, y = 200},
 		dimensions	= {w = 400, h = 400},
-		pad			= {0, 0, 0, 0},
+		pad			= {100, 100, 100, 100},
 	}
 end
 

@@ -15,7 +15,7 @@ roundrect.new = function (x, y, width, height, radius, precision)
 	end
 
 	for u = 1, 5 do
-		local i = u % 4
+		local i = ((u - 1) % 4) + 1
 		if u < 5 then
 			local j, size = i % 4 + 1, i % 2 == 1 and width or height
 			--Check if the radius is messed up (the sum of the radius is bigger than width/height)
@@ -33,8 +33,9 @@ roundrect.new = function (x, y, width, height, radius, precision)
 				table.insert(p, ys[i] and y or y + height)
 			else
 				local precision = precision or radius[i]^2
-				for j = 0, precission do
-					local add = (xs[i] and ys[i]) and 0 or ((xs[i] and 1.5 or 1) + (ys[i] and 0.5 or 1))
+				for j = 0, precision do
+					local add = (xs[i] and ys[i]) and 2 or ((xs[i] and 3 or 2) + (ys[i] and 1 or 2))
+					print(add % 4)
 					local angle = (j / precision + add) * math.pi / 2
 					table.insert(p, (xs[i] and x + radius[i] or x + width  - radius[i]) + radius[i] * math.cos(angle))
 					table.insert(p, (ys[i] and y + radius[i] or y + height - radius[i]) + radius[i] * math.sin(angle))
@@ -47,7 +48,12 @@ roundrect.new = function (x, y, width, height, radius, precision)
 end
 
 roundrect.polygon = function (mode, polygon)
-	love.graphics.polygon(mode, unpack(polygon))
+	if mode == "both" then
+		love.graphics.polygon("fill", unpack(polygon))
+		love.graphics.polygon("line", unpack(polygon))
+	else
+		love.graphics.polygon(mode, unpack(polygon))
+	end
 end
 
 roundrect.draw = function (mode, ...)
