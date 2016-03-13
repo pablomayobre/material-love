@@ -1,7 +1,7 @@
 local image = {}
 
 local hsvShader
-local supported = love.graphics.isSupported ("shader")
+local supported = (love.getVersion())[2] == 10 or love.graphics.isSupported ("shader")
 
 image.shader = [[
 	vec3 rgb2hsv(vec3 c)
