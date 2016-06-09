@@ -93,8 +93,15 @@ ripple.draw = function (self,...)
 	if self.type == "stencil" then
 		return self:draw(...)
 	end
+	
+	local hasNewStencils = not lg.setStencil and lg.stencil and lg.setStencilTest
 
-	lg.setStencil(self.custom)
+	if hasNewStencils then
+		lg.stencil(self.custom)
+		lg.setStencilTest("greater", 0)
+	else
+		lg.setStencil(self.custom)
+	end
 
 	local _r,_g,_b,_a = lg.getColor()
 	
@@ -135,7 +142,12 @@ ripple.draw = function (self,...)
 	end
 
 	lg.setColor(_r, _g, _b, _a)
-	lg.setStencil()
+
+	if hasNewStencils then
+		lg.setStencilTest()
+	else
+		lg.setStencil()
+	end
 end
 
 ripple.custom = function (custom, fr, time)
