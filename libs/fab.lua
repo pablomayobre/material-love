@@ -5,8 +5,10 @@ local load = function (a)
 
 	fab.assets = {}
 
+	local flag = select(2, love.getVersion()) > 9 and {linear = true} or "normal"
+
 	for i=1,5 do
-		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png" )
+		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png", flag)
 	end
 
 	fab.draw = function (x,y,r,depth)
