@@ -20,3 +20,6 @@ $RECYCLE.BIN/
 #Notepad++ Backup files
 nppBackup/
 *.bak
+
+#Dropbox attr file
+.dropbox.attr
