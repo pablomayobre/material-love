@@ -5,18 +5,20 @@ local load = function (a)
 
 	fab.assets = {}
 
+	local flag = select(2, love.getVersion()) > 9 and {linear = true} or "normal"
+
 	for i=1,5 do
-		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png" )
+		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png", flag)
 	end
 
 	fab.draw = function (x,y,r,depth)
 
-		local r = r or 28 * ps
+		r = r or 28 * ps
 		if r == "mini" then r = 20 * ps end
 
-		local depth = depth or 1
+		depth = depth or 1
 
-		if not fab.assets[depth] then 
+		if not fab.assets[depth] then
 			error("Argument #4 to fab.draw is not a valid depth",2)
 		end
 
@@ -38,8 +40,8 @@ local load = function (a)
 		lg.circle("fill", x, y, r)
 		lg.circle("line", x, y, r)
 	end
-	
-	setmetatable(fab,{__call = function (fab,...) return fab.draw(...) end})
+
+	setmetatable(fab,{__call = function (self,...) return self.draw(...) end})
 
 	return fab
 end
