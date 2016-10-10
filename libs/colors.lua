@@ -355,13 +355,26 @@ local _c = {
 	}
 }
 
+local isSRGB = love.graphics.isGammaCorrect and love.graphics.isGammaCorrect() or function ()
+	local _, _, flags = love.window.getMode()
+	return flags.srgb
+end
+
+local correct = function (color)
+	if isSRGB then
+		return love.math.linearToGamma(color)
+	else
+		return unpack(color)
+	end
+end
+
 function colors.main(name, variation)
 	if (name == "black" or name == "white") then
 		if variation then
 			error ("The colors black and white dont support variations, use colors.monochrome instead", 2)
 		end
 		
-		return unpack(_c[name].full)
+		return correct(_c[name].full)
 	end
 
 	local variation = variation or "500"
@@ -380,7 +393,7 @@ function colors.main(name, variation)
 		error ("Argument #2 to colors, "..variation.." is not a valid color variation for the color: "..name, 2)
 	end
 
-	return unpack(_c[name][variation])
+	return convert(_c[name][variation])
 end
 
 function colors.mono(name, variation)
@@ -394,7 +407,7 @@ function colors.mono(name, variation)
 		error ("Argument #2 to monochrome, "..variation.." is not a valid color variation", 2)
 	end
 
-	return unpack(_c[name][variation])
+	return convert(_c[name][variation])
 end
 
 function colors.list()
@@ -426,12 +439,12 @@ function colors.background (l)
 
 	if l ~= "light" then
 		if l == "dark" then
-			return 0x37, 0x47, 0x4f, 0xff --blue-grey 800
+			return convert(colors["blue-grey"]["800"])
 		else
 			error ("Argument #1 to background, is not light nor black", 2)
 		end
 	else
-		return 0xf9, 0xf9, 0xf9, 0xff --grey 50
+		return convert(colors["grey"]["50"])
 	end
 end
 
