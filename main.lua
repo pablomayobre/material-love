@@ -2,17 +2,17 @@ io.stdout:setvbuf("no")
 
 local m
 local lw,lg = love.window,love.graphics
-local li = love.image.newImageData
+--local li = love.image.newImageData
 local w, h, ps
 
 local AppBar, Card, Circle, Back, Accept, Cancel, Toast
 
-local click, i, cursor, hover, hf
+local click--, i, cursor, hover, hf
 
 local Collisions = {
 	circle = function (x,y,c,f,e)
-		local f = f or function () end
-		local e = e or function () end
+		f = f or function () end
+		e = e or function () end
 
 		if (x - c.x)^2 + (y - c.y)^2 < c.r ^ 2 then
 			f(x,y,c)
@@ -22,10 +22,10 @@ local Collisions = {
 	end,
 
 	box = function (x,y,b,t,f,e)
-		local f = f or function () end
-		local e = e or function () end
+		f = f or function () end
+		e = e or function () end
 
-		local t = t or {}
+		t = t or {}
 		if 	x > b.x - (t[1] or 0) and
 			y > b.y - (t[2] or 0) and
 			x < (b.x + b.w) + (t[3] or 0) and
@@ -39,11 +39,7 @@ local Collisions = {
 }
 
 love.load = function ()
-	local a = love.timer.getTime()
 	m = require "material-love"
-	local b = love.timer.getTime()
-
-	print (b - a)
 
 	-- i = lg.newImage("material-love/images/nine-patch.png")
 	-- m.nine.convert(i, "shadow",true)
@@ -102,13 +98,13 @@ love.load = function ()
 		t = 0,
 		inside = false,
 		out = true,
-		nupdate = function (Toast,dt)
-			Toast.t = Toast.t + dt
-			local p = Toast.t/0.5
-			Toast.h = Toast.fh * (-p * (p - 2))
+		nupdate = function (self, dt)
+			self.t = self.t + dt
+			local p = self.t/0.5
+			self.h = self.fh * (-p * (p - 2))
 
-			if Toast.t > 0.5 then
-				Toast.update = function () end
+			if self.t > 0.5 then
+				self.update = function () end
 			end
 		end
 	}
@@ -154,9 +150,9 @@ love.draw = function ()
 	lg.line(Card.x + 16 * ps, Card.y + 40 * ps, Card.x + Card.w - 16 * ps, Card.y + 40 * ps)
 	lg.setColor(m.colors.mono("black", "body"))
 	lg.setFont(m.roboto "body1")
-	lg.printf([[Material-love provides functions to easily recreate the material-design functionalities in Love, such as ripples and shadows.
+	lg.printf([[Material-Love provides functions to easily recreate the material-design functionalities in Love, such as ripples and shadows.
 	Go to the repo by clicking the heart or close this form with the back arrow in the AppBar. You can also open the toasts by clicking any of the two buttons in the bottom of the card.
-	
+
 	PS: Enjoy the ripples!]], Card.x + 16 * ps, Card.y + 48 * ps, Card.w - 32 * ps)
 
 	lg.setColor(m.colors("grey", "400"))
@@ -201,13 +197,13 @@ love.mousepressed = function (x,y,b)
 	if Toast.inside then
 		Toast.inside = false
 		Toast.t = 0
-		Toast.update = function (Toast, dt)
-			Toast.t = Toast.t + dt
-			local p = Toast.t/0.5
-			Toast.h = Toast.fh - Toast.fh * (-p * (p - 2))
+		Toast.update = function (self, dt)
+			self.t = self.t + dt
+			local p = self.t/0.5
+			self.h = self.fh - self.fh * (-p * (p - 2))
 
-			if Toast.t > 0.5 then
-				Toast.out = true
+			if self.t > 0.5 then
+				self.out = true
 			end
 		end
 	end
@@ -247,7 +243,7 @@ love.mousepressed = function (x,y,b)
 	end)
 end
 
-love.mousereleased = function (x,y,b)
+love.mousereleased = function ()
 	Accept.ripple:fade()
 	Cancel.ripple:fade()
 	Back:fade()
