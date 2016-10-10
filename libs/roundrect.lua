@@ -35,7 +35,6 @@ roundrect.new = function (x, y, width, height, radius, precision)
                 precision = precision or radius[i]^2
                 for j = 0, precision do
                     local add = (xs[i] and ys[i]) and 2 or ((xs[i] and 3 or 2) + (ys[i] and 1 or 2))
-                    print(add % 4)
                     local angle = (j / precision + add) * math.pi / 2
                     table.insert(p, (xs[i] and x + radius[i] or x + width  - radius[i]) + radius[i] * math.cos(angle))
                     table.insert(p, (ys[i] and y + radius[i] or y + height - radius[i]) + radius[i] * math.sin(angle))

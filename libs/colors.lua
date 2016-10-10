@@ -361,7 +361,7 @@ local isSRGB = love.graphics.isGammaCorrect and love.graphics.isGammaCorrect() o
 end
 
 local convert = function (color)
-    if isSRGB then
+    if isSRGB() then
         return love.math.linearToGamma(color)
     else
         return unpack(color)
@@ -439,12 +439,12 @@ function colors.background (l)
 
     if l ~= "light" then
         if l == "dark" then
-            return convert(colors["blue-grey"]["800"])
+            return convert(_c["blue-grey"]["800"])
         else
             error ("Argument #1 to background, is not light nor black", 2)
         end
     else
-        return convert(colors["grey"]["50"])
+        return convert(_c["grey"]["50"])
     end
 end
 
