@@ -1,32 +1,32 @@
 # How to Contribute
 
-I would seriously love your help on this project, we would like to hear how this library performs in your project, your sugerences and issues.
-Also we would really appreciate your contributions, so that this project can keep growing better. That is why this guide is to help you and me so that contributing to this project is easier.
+I would seriously love your help on this project, I would like to hear how this library performs in your project, your sugerences and issues.
+Also I would really appreciate your contributions, so that this project can keep growing.
 
-Please follow this guideline in your Issues and Pull Request, otherwise I would not pay as much attention as it deserves.
+This guide can help you and me to do that.
+Please follow this guideline in your Issues and Pull Requests.
 
 ## Bugs
 
-Well this library is pretty new so it may contain bugs in it, so in order for me or someone else to fix them you will need to provide some info.
+Well this library is pretty new so it may contain bugs in it, in order for me or someone else to fix them you will need to provide some info.
 
-1. First make sure that the issue was not posted before, look through the open issues and if you find someone having the same issue then comment on it saying you also have the same issue (if you can, post your system info and the error returned by LÖVE).
+1. First make sure that the issue was not posted before, look through the open issues and if you find someone having the same issue then comment on it saying you also have experienced it (if you can, post your system info and the error returned by LÖVE).
 2. Look though closed issues, if the issue was reported before, try the proposed fixes, if the error persist, add "Similar to issue #n" in your issue description.
-3. Mark your issue as a bug by appending `[Bug]` to your issue name
-4. Make a descriptive title, but make it shor, "Please help me" is not a good example.
-5. State the library you are having problems with, if you have problems with `nine.lua` then append `[nine]` to your issue name
+3. Mark your issue as a bug by adding the `bug` label to your issue.
+4. Make a descriptive title, but make it short, "Please help me" is not good!
+5. State the library you are having problems with, if you have problems with `shadow.lua` then add the `shadow` label to your issue
 6. Please provide info about your system, like Operating System and the version of LÖVE you are using
-7. If you can, provide the error log that LÖVE outputs in the blue screen.
-8. Help us recreate the bug, through a code snippet or uploading a `.love` file
+7. If you can, provide the error log that LÖVE outputs in the blue screen (Through an image or in a code block).
+8. Help us recreate the bug, through a code snippet or uploading a `.love` file (THIS WOULD BE GREAT!)
 9. Write a good description... Though if you provided everything I wrote above, it will be descriptive enough.
 
 This pretty much applies to everything from here onwards.
 
 ## Feature Requests
 
-The same as above, but instead of bug, add `[Feature]` to your issue tittle.
-Your system info, the error, and info on how to recreate it of course is not required
+The same as above, except your system info, the error, and info on how to recreate it are not required. Add the `feature` label to your issue!
 
-But you have to state which library you want to expand, in the title, for example if the feature is for the colors library add `[colors]` to your title.
+But you hav to state which library you want to expand, in the title, for example if the feature is for the colors library add the `colors` label to your PR.
 
 Also provide a good description of the feature and an example of the API you expect it to use.
 
@@ -34,13 +34,13 @@ If it is related to the Material-Design spec, provide a link to where the spec t
 
 ## Problems with the docs
 
-Add `[Doc]` to the title, and a link to the page, the one with the error, in your description.
+Add the `doc` label, and a link to the page, the one with the error, in your description.
 
 ## Patches
 
 If you can fix an issue and want to make a Pull Request that would be really amazing!
 
-Just be sure to provide info on what it fixes and in which file, similar than with issues (Adding the name to the title).
+Just be sure to provide info on what it fixes and in which file, similar than with issues (Adding the appropiate labels).
 
 If the issue was reported please add "Fixes #n" to your description.
 
