@@ -1,7 +1,7 @@
 local roboto = {}
 
 local lf = love.graphics.newFont
-local ps = love.window.getPixelScale()
+local ps = love.window.getDPIScale()
 local OS = love.system.getOS()
 
 local n = OS == "Android" and OS == "iOS" and 0 or 1

@@ -364,7 +364,8 @@ local convert = function (color)
     if isSRGB() then
         return love.math.linearToGamma(color)
     else
-        return unpack(color)
+        local r, g, b, a = unpack(color)
+        return r/255, g/255, b/255, a/255
     end
 end
 

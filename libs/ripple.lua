@@ -15,7 +15,6 @@ ripple.fade = function (self)
 
     if self.active then
         self.ripples[#self.ripples + 1] = self.active
-
         self.active = nil
     end
 end

@@ -24,8 +24,6 @@ end
 shadow.images = {}
 shadow.patch = {}
 
-local flag = select(2, love.getVersion()) > 9 and {linear = true} or "normal"
-
 local draw = function (x, y, w, h, image)
     return shadow.patch[image or shadow.default]:draw(x, y, w, h, true)
 end
@@ -43,7 +41,7 @@ shadow.load = function (path, patchy, images, default)
         error("bad argument #3 to 'shadow.load' (table expected, got "..type(images)..")", 2)
     else
         for _, name in ipairs(images) do
-            shadow.images[name] = love.graphics.newImage(path.."-"..name..".png", flag)
+            shadow.images[name] = love.graphics.newImage(path.."-"..name..".png")
         end
     end
 

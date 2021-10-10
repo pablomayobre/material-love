@@ -1,7 +1,7 @@
 local draw = {}
 
 return function (assets, icons, color)
-    local ps = love.window.getPixelScale()
+    local ps = love.window.getDPIScale()
     local lg = love.graphics
 
     draw.font = lg.newFont(assets .. "/icons.ttf", 24 * ps)

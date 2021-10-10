@@ -1,14 +1,12 @@
 local fab = {}
 
 local load = function (a)
-	local lg,ps = love.graphics, love.window.getPixelScale()
+	local lg,ps = love.graphics, love.window.getDPIScale()
 
 	fab.assets = {}
 
-	local flag = select(2, love.getVersion()) > 9 and {linear = true} or "normal"
-
 	for i=1,5 do
-		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png", flag)
+		fab.assets[i] = lg.newImage( a.."/fab-"..i..".png")
 	end
 
 	fab.draw = function (x,y,r,depth)
@@ -29,7 +27,7 @@ local load = function (a)
 			lg.translate(x, y)
 			lg.scale(r / 80)
 
-			lg.setColor(255, 255, 255, 255)
+			lg.setColor(1, 1, 1, 1)
 
 			lg.draw(fab.assets[depth], -200, -200)
 
