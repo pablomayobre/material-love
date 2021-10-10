@@ -1,9 +1,9 @@
-# Material-Love 1.1.0
-![Logo Material - Love](https://github.com/Positive07/material-love/blob/master/images/logo.png)
+# Material-Love 1.2.0
+![Logo Material - Love](https://github.com/flamendless/material-love/blob/master/images/logo.png)
 
 Material-Love is a set of libraries to use some of the features described in the Google [Material-Design spec][1], in your [LÖVE][2] projects.
 
-![Animation of Material - Love working](https://github.com/Positive07/material-love/blob/master/images/master.gif)
+![Animation of Material - Love working](https://github.com/flamendless/material-love/blob/master/images/master.gif)
 
 Material-Love takes the overhead of generating some of the fancy effects described in those docs, like shadows, paper and ripples. It also facilitates the access to some other stuff like the Roboto Fonts, the color palettes, and even provides an icon font with 1008 icons you can use in your project!
 
@@ -17,20 +17,22 @@ It is **NOT** a UI library nor is it intended to be, if you want you can use it 
 
 ## Demo
 
-Download a demo of this library from the releases [here](https://github.com/Positive07/material-love/releases/tag/1.1.0-demo)
+Download a demo of this library from the releases [here](https://github.com/flamendless/material-love/releases/tag/1.2.0-demo)
 
 Check the demo source code in the [`test` branch](https://github.com/Positive07/material-love/tree/test)
 
+or in [Anagramer](https://github.com/flamendless/anagramer)
+
 ## Download
 
-You can `git clone` this repo (I recommend you go to the [`source` branch](https://github.com/Positive07/material-love/tree/source), since it doesnt have the unnecessary files)
+You can `git clone` this repo (I recommend you go to the [`source` branch](https://github.com/flamendless/material-love/tree/source), since it doesnt have the unnecessary files)
 
 ```shell
-git clone https://github.com/Positive07/material-love.git
+git clone https://github.com/flamendless/material-love.git
 git checkout source
 ```
 
-Alternatively you can download a `.zip` or `.tar.gz` from the [Releases](https://github.com/Positive07/material-love/releases/tag/1.1.0)
+Alternatively you can download a `.zip` or `.tar.gz` from the [Releases](https://github.com/flamendless/material-love/releases/tag/1.2.0)
 
 ## Documentation
 
