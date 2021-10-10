@@ -7,6 +7,8 @@ Material-Love is a set of libraries to use some of the features described in the
 
 Material-Love takes the overhead of generating some of the fancy effects described in those docs, like shadows, paper and ripples. It also facilitates the access to some other stuff like the Roboto Fonts, the color palettes, and even provides an icon font with 1008 icons you can use in your project!
 
+For 11.+ support check [flamendless fork](https://github.com/flamendless/material-love)
+
 ***
 
 It is **NOT** a UI library nor is it intended to be, if you want you can use it with any other GUI library like [Luigi][4], [SUIT][5] or almost any other one.
